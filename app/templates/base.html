@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | organizeAIO</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        // force light theme for now
+        document.documentElement.classList.remove('dark')
+
+        tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+            colors: {
+                primary: {"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"}
+            }
+            },
+            fontFamily: {
+            'body': [
+            'Inter', 
+            'ui-sans-serif', 
+            'system-ui', 
+            '-apple-system', 
+            'system-ui', 
+            'Segoe UI', 
+            'Roboto', 
+            'Helvetica Neue', 
+            'Arial', 
+            'Noto Sans', 
+            'sans-serif', 
+            'Apple Color Emoji', 
+            'Segoe UI Emoji', 
+            'Segoe UI Symbol', 
+            'Noto Color Emoji'
+        ],
+            'sans': [
+            'Inter', 
+            'ui-sans-serif', 
+            'system-ui', 
+            '-apple-system', 
+            'system-ui', 
+            'Segoe UI', 
+            'Roboto', 
+            'Helvetica Neue', 
+            'Arial', 
+            'Noto Sans', 
+            'sans-serif', 
+            'Apple Color Emoji', 
+            'Segoe UI Emoji', 
+            'Segoe UI Symbol', 
+            'Noto Color Emoji'
+        ]
+            }
+        }
+        }
+    </script>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-white dark:bg-gray-900">
+    {% block content %}
+    {% endblock %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
+</body>
+</html>

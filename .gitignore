@@ -1,0 +1,4 @@
+.env
+flask_session/
+__pycache__/
+nohup.out
