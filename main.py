@@ -1,5 +1,11 @@
+#!/home/user/myapp/organizeAIO/env/bin/python
+import logging, sys
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 from app import app
 from dotenv import load_dotenv
 load_dotenv(".env")
 
-app.run(host="0.0.0.0", port=9738, debug=True)
+port = sys.argv[1]
+app.run(host="0.0.0.0", port=port, debug=True)
