@@ -1,0 +1,8 @@
+appwrite==4.0.0
+argon2-cffi==21.3.0
+argon2-cffi-bindings==21.2.0
+Flask==2.3.2
+Flask-Session==0.5.0
+Jinja2==3.1.2
+requests==2.25.1
+python-dotenv==1.0.0
