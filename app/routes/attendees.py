@@ -5,7 +5,15 @@ from datetime import datetime
 @app.route("/hackathon/<hid>/attendees")
 def attendees(hid):
     attendees = get_all_docs(hid, "attendees")
-    return render_template("attendees.html", attendees=attendees)
+    hacks = db.get(hid)
+    meta = db.get_document(hacks['$id'], "metadata", "data")
+
+    data = {
+        "id": hacks['$id'],
+        "name": meta['name'],
+    }
+    attributes = db.list_attributes(hid, 'attendees')
+    return render_template("attendees.html", attendees=attendees, data=data, attrs=attributes)
 
 @app.post("/hackathon/<hackathon_id>/attendees/delete/<attendee_id>")
 def delete_attendee(hackathon_id, attendee_id):

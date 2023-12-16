@@ -18,8 +18,8 @@ def hackathon(id):
         "name": meta['name'],
         "daysLeft": daysLeft,
         "attendees": len(attendees),
-        "startDate": datetime.strptime(meta['startDate'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%A, %b %d %I:%M %p"),
-        "endDate": datetime.strptime(meta['endDate'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%A, %b %d %I:%M %p"),
+        "startDate": datetime.strptime(meta['startDate'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%m/%d/%Y"),
+        "endDate": datetime.strptime(meta['endDate'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%m/%d/%Y"),
     }
 
     return render_template("hackathon.html", data=data)
