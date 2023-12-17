@@ -83,7 +83,7 @@ def new_hackathon():
     db.create_string_attribute(hackathon_id, "judging", "comment", 100, False, None)
 
     formField_name = db.create_document(hackathon_id, "registration_form", "unique()", {
-        "field_name": "Full Name",
+        "field_name": "name",
         "type": "text",
         "options": [],
         "placeholder": "Enter your full name",
@@ -91,7 +91,7 @@ def new_hackathon():
         "required": True,
     })
     formField_email = db.create_document(hackathon_id, "registration_form", "unique()", {
-        "field_name": "Email",
+        "field_name": "email",
         "type": "email",
         "options": [],
         "placeholder": "Enter your email",

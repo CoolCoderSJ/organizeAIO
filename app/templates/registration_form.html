@@ -6,51 +6,77 @@
 <div class="mx-auto ml-[300px] max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 flex justify-between mr-24">
     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Registration Form</h2>
 
+    <div class="flex gap-2" style="align-items: center;">
+    <form method="post" action="/hackathon/{{ data['id'] }}/reorder">
+        <input type="hidden" name="order" id="order">
+    <button id="reorderButton" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" type="submit">
+        Save Question Order
+    </button>
+    </form>
+
     <button id="createAttrButton" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" type="button" data-drawer-target="create_attribute_drawer" data-drawer-show="create_attribute_drawer" aria-controls="create_attribute_drawer">
         Create Attribute
     </button>
+    </div>
 </div>
-<br><br>
+<br>
 
-<div class="mx-auto ml-[300px] max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900">
+<script>
+    $(function() {
+            $('.sortable').sortable({
+               update: function(event, ui) {
+                  var productOrder = $(this).sortable('toArray').toString();
+                  console.log(productOrder);
+                  document.getElementById("order").value = productOrder;
+               }
+            });
+         });
+</script>
+
+<ul class="mx-auto ml-[300px] max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 sortable">
     {% for item in form %}
-    <h3 class="mb-4 text-3xl tracking-tight font-bold text-gray-900 dark:text-white">{{ item['placeholder'] }}</h3>
-    <div class="flex gap-4 mb-12">
-        <button id="editAttrButton" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" type="button" data-modal-target="edit_q_drawer__{{ item['$id'] }}" data-modal-toggle="edit_q_drawer__{{ item['$id'] }}">
-            Edit Question
-        </button>
+    <li id="{{ item['$id'] }}" style="list-style: none; align-items: center" class="border-primary-800 py-8 px-8 border w-[50%] mb-6 rounded-lg flex gap-8">
+        <i class="fa-solid fa-grip-vertical" style="color: white; cursor: grab;"></i>
+        <div>
+            <h3 class="mb-4 text-3xl tracking-tight font-bold text-gray-900 dark:text-white">{{ item['placeholder'] }}</h3>
+            <div class="flex gap-4">
+                <button id="editAttrButton" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" type="button" data-modal-target="edit_q_drawer__{{ item['$id'] }}" data-modal-toggle="edit_q_drawer__{{ item['$id'] }}">
+                    Edit Question
+                </button>
 
 
-        <button id="deleteAttrButton" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800" type="button" data-modal-target="delete_q_modal__{{ item['$id'] }}" data-modal-toggle="delete_q_modal__{{ item['$id'] }}">
-            Delete Question
-        </button>
+                <button id="deleteAttrButton" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800" type="button" data-modal-target="delete_q_modal__{{ item['$id'] }}" data-modal-toggle="delete_q_modal__{{ item['$id'] }}">
+                    Delete Question
+                </button>
 
-        <div id="delete_q_modal__{{ item['$id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-            <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-                <!-- Modal content -->
-                <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                    <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="delete_q_modal__{{ item['$id'] }}">
-                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                    <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                    <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to remove this question?</p>
-                    <div class="flex justify-center items-center space-x-4">
-                        <button data-modal-toggle="delete_q_modal__{{ item['$id'] }}" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                            No, cancel
-                        </button>
-                        <form method="post" action="/hackathon/{{ data['id'] }}/form/delete/{{ item['$id'] }}">
-                        <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                            Yes, I'm sure
-                        </button>
-                        </form>
+                <div id="delete_q_modal__{{ item['$id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+                    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                        <!-- Modal content -->
+                        <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                            <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="delete_q_modal__{{ item['$id'] }}">
+                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                            <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                            <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to remove this question?</p>
+                            <div class="flex justify-center items-center space-x-4">
+                                <button data-modal-toggle="delete_q_modal__{{ item['$id'] }}" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                    No, cancel
+                                </button>
+                                <form method="post" action="/hackathon/{{ data['id'] }}/form/delete/{{ item['$id'] }}">
+                                <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                    Yes, I'm sure
+                                </button>
+                                </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
             </div>
-    </div>
+        </div>
+    </li>
     {% endfor %}
-</div>
+</ul>
 
 
 {% for item in form %}
@@ -157,7 +183,7 @@
 
             <div>
                 <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question Type</label>
-                <select onchange="if (this.value == 'range' || this.value == 'radio') {document.getElementById('options_input').setAttribute('style', 'display: block'); document.getElementById('options_c').setAttribute('required', 'required')} else {document.getElementById('options_input').setAttribute('style', 'display: none'); document.getElementById('options_c').removeAttribute('required')}" name="type" id="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select onchange="if (this.value == 'range' || this.value == 'radio') {document.getElementById('options_input_c').setAttribute('style', 'display: block'); document.getElementById('options_c').setAttribute('required', 'required')} else {document.getElementById('options_input_c').setAttribute('style', 'display: none'); document.getElementById('options_c').removeAttribute('required')}" name="type" id="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="text" selected>Text Input</option>
                 <option value="color">Color Input</option>
                 <option value="date">Date Input</option>
@@ -172,7 +198,7 @@
                 </select>
             </div>
 
-            <div id="options_input" style="display: none;">
+            <div id="options_input_c" style="display: none;">
                 <label for="options" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">For Radio/MCQ Inputs: Write the options you want separated by a comma. <br>For range inputs: write min,max where min and max are numbers that the range should fit. For example: 1, 5 would let participants pick a number from 1 to 5.</label>
                 <input type="text" name="options" id="options_c" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Options" required="">
             </div>

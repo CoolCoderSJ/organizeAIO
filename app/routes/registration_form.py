@@ -12,11 +12,22 @@ def registration_form(hid):
         "id": hacks['$id'],
         "name": meta['name'],
     }
-    return render_template("registration_form.html", form=form, data=data)
+    order = meta['form_order']
+    form_n = []
+    print(form, order)
+    for i in order:
+        elem = next(item for item in form if item["$id"] == i)
+        form_n.append(elem)
+    return render_template("registration_form.html", form=form_n, data=data)
 
 @app.post("/hackathon/<hackathon_id>/form/delete/<form_id>")
 def delete_form_field(hackathon_id, form_id):
     field_name = db.get_document(hackathon_id, "registration_form", form_id)['field_name']
+    order = db.get_document(hackathon_id, "metadata", "data")['form_order']
+    order.remove(form_id)
+    db.update_document(hackathon_id, "metadata", "data", {
+        "form_order": order
+    })
     db.delete_document(hackathon_id, "registration_form", form_id)
     db.delete_attribute(hackathon_id, "attendees", field_name)
     return redirect(f"/hackathon/{hackathon_id}/form")
@@ -50,6 +61,21 @@ def add_form_field(hackathon_id):
     if data['required'] == "Yes": data['required'] = True
     else: data['required'] = False
     data['field_name'] = "".join([s for s in data['field_name'] if s.isalnum()])
-    db.create_document(hackathon_id, "registration_form", "unique()", data)
+    order = db.get_document(hackathon_id, "metadata", "data")['form_order']
+    data = db.create_document(hackathon_id, "registration_form", "unique()", data)
+    order.append(data['$id'])
+    db.update_document(hackathon_id, "metadata", "data", {
+        "form_order": order
+    })
     db.create_string_attribute(hackathon_id, "attendees", data['field_name'], 100, False, None)
+    return redirect(f"/hackathon/{hackathon_id}/form")
+
+@app.post("/hackathon/<hackathon_id>/reorder")
+def reorder_form_fields(hackathon_id):
+    order = request.form['order']
+    print(order)
+    if not order: return redirect(f"/hackathon/{hackathon_id}/form")
+    db.update_document(hackathon_id, "metadata", "data", {
+        "form_order": order.split(",")
+    })
     return redirect(f"/hackathon/{hackathon_id}/form")
