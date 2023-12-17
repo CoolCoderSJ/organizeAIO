@@ -9,17 +9,17 @@ def schedule(hid):
 
 @app.post("/hackathon/<hackathon_id>/schedule/delete/<schedule_id>")
 def delete_schedule_item(hackathon_id, schedule_id):
-    db.delete(hackathon_id, "schedule", schedule_id)
+    db.delete_document(hackathon_id, "schedule", schedule_id)
     return redirect(f"/hackathon/{hackathon_id}/schedule")
 
 @app.post("/hackathon/<hackathon_id>/schedule/edit/<schedule_id>")
 def edit_schedule_item(hackathon_id, schedule_id):
-    data = {k: v[0] for k, v in dict(request.form).items()}
-    db.update(hackathon_id, "schedule", schedule_id, data)
+    data = {k: v for k, v in request.form.items()}
+    db.update_document(hackathon_id, "schedule", schedule_id, data)
     return redirect(f"/hackathon/{hackathon_id}/schedule")
 
 @app.post("/hackathon/<hackathon_id>/schedule/add")
 def add_schedule_item(hackathon_id):
-    data = {k: v[0] for k, v in dict(request.form).items()}
-    db.create(hackathon_id, "schedule", "unique()", data)
+    data = {k: v for k, v in request.form.items()}
+    db.create_document(hackathon_id, "schedule", "unique()", data)
     return redirect(f"/hackathon/{hackathon_id}/schedule")

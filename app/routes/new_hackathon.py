@@ -53,9 +53,9 @@ def new_hackathon():
 
 
     db.create_string_attribute(hackathon_id, "registration_form", "field_name", 100, False, None)
-    # one of - checkbox, color, date, datetime-local, email, number, radio, range, reset, tel, text, time, url
+    # one of - color, date, datetime-local, email, number, radio, range, tel, text, time, url
     db.create_string_attribute(hackathon_id, "registration_form", "type", 100, False, None)
-    # for checkboxes or radios
+    # for radios or range
     db.create_string_attribute(hackathon_id, "registration_form", "options", 100, False, None, True)
     db.create_string_attribute(hackathon_id, "registration_form", "placeholder", 100, False, None)
     db.create_string_attribute(hackathon_id, "registration_form", "default", 100, False, None)

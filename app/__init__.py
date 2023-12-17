@@ -39,6 +39,7 @@ def get_all_docs(data, collection, queries=[]):
     offset = 0
     queries.append(Query.offset(offset))
     queries.append(Query.limit(100))
+    print(queries)
     while True:
         results = db.list_documents(data, collection, queries=queries)
         if len(docs) == results['total']:

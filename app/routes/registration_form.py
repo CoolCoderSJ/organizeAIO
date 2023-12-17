@@ -9,17 +9,27 @@ def registration_form(hid):
 
 @app.post("/hackathon/<hackathon_id>/form/delete/<form_id>")
 def delete_form_field(hackathon_id, form_id):
-    db.delete(hackathon_id, "registration_form", form_id)
+    field_name = db.get_document(hackathon_id, "registration_form", form_id)['field_name']
+    db.delete_document(hackathon_id, "registration_form", form_id)
+    db.delete_attribute(hackathon_id, "attendees", field_name)
     return redirect(f"/hackathon/{hackathon_id}/form")
 
 @app.post("/hackathon/<hackathon_id>/form/edit/<form_id>")
 def edit_form_field(hackathon_id, form_id):
-    data = {k: v[0] for k, v in dict(request.form).items()}
-    db.update(hackathon_id, "registration_form", form_id, data)
+    data = {k: v for k, v in request.form.items()}
+    data['options'] = data['options'].split(', ')
+    if data['required'] == "Yes": data['required'] = True
+    else: data['required'] = False
+    db.update_document(hackathon_id, "registration_form", form_id, data)
+    db.update_attribute(hackathon_id, "attendees", data['field_name'], 100, False, None)
     return redirect(f"/hackathon/{hackathon_id}/form")
 
 @app.post("/hackathon/<hackathon_id>/form/add")
 def add_form_field(hackathon_id):
-    data = {k: v[0] for k, v in dict(request.form).items()}
-    db.create(hackathon_id, "registration_form", "unique()", data)
+    data = {k: v for k, v in request.form.items()}
+    data['options'] = data['options'].split(', ')
+    if data['required'] == "Yes": data['required'] = True
+    else: data['required'] = False
+    db.create_document(hackathon_id, "registration_form", "unique()", data)
+    db.create_string_attribute(hackathon_id, "attendees", data['field_name'], 100, False, None)
     return redirect(f"/hackathon/{hackathon_id}/form")

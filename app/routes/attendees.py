@@ -13,35 +13,43 @@ def attendees(hid):
         "name": meta['name'],
     }
     attributes = db.list_attributes(hid, 'attendees')
-    return render_template("attendees.html", attendees=attendees, data=data, attrs=attributes)
+
+    registration = get_all_docs(hid, "registration_form")
+    form = {}
+    for item in registration:
+        form[item['field_name']] = {
+            "type": item['type'],
+            "required": item['required'],
+            "options": item['options'],
+            "default": item['default'],
+            "placeholder": item['placeholder']
+        }
+    print(form)
+    return render_template("attendees.html", attendees=attendees, data=data, attrs=attributes, form=form)
 
 @app.post("/hackathon/<hackathon_id>/attendees/delete/<attendee_id>")
 def delete_attendee(hackathon_id, attendee_id):
-    db.delete(hackathon_id, "attendees", attendee_id)
+    db.delete_document(hackathon_id, "attendees", attendee_id)
     return redirect(f"/hackathon/{hackathon_id}/attendees")
 
 @app.post("/hackathon/<hackathon_id>/attendees/checkin/<attendee_id>")
 def checkin_attendee(hackathon_id, attendee_id):
-    attendee = db.get(hackathon_id, "attendees", attendee_id)
-    attendee['checkedIn'] = True
-    db.update(hackathon_id, "attendees", attendee_id, attendee)
+    db.update_document(hackathon_id, "attendees", attendee_id, {"checkedIn": True})
     return redirect(f"/hackathon/{hackathon_id}/attendees")
 
 @app.post("/hackathon/<hackathon_id>/attendees/uncheckin/<attendee_id>")
 def uncheckin_attendee(hackathon_id, attendee_id):
-    attendee = db.get(hackathon_id, "attendees", attendee_id)
-    attendee['checkedIn'] = False
-    db.update(hackathon_id, "attendees", attendee_id, attendee)
+    db.update_document(hackathon_id, "attendees", attendee_id, {"checkedIn": False})
     return redirect(f"/hackathon/{hackathon_id}/attendees")
 
 @app.post("/hackathon/<hackathon_id>/attendees/edit/<attendee_id>")
 def edit_attendee(hackathon_id, attendee_id):
-    data = {k: v[0] for k, v in dict(request.form).items()}
-    db.update(hackathon_id, "attendees", attendee_id, data)
+    data = {k: v for k, v in request.form.items()}
+    db.update_document(hackathon_id, "attendees", attendee_id, data)
     return redirect(f"/hackathon/{hackathon_id}/attendees")
 
 @app.post("/hackathon/<hackathon_id>/attendees/add")
 def add_attendee(hackathon_id):
-    data = {k: v[0] for k, v in dict(request.form).items()}
-    db.create(hackathon_id, "attendees", data)
+    data = {k: v for k, v in request.form.items()}
+    db.create_document(hackathon_id, "attendees", "unique()", data)
     return redirect(f"/hackathon/{hackathon_id}/attendees")

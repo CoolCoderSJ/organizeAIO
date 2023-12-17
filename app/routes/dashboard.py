@@ -11,7 +11,7 @@ def dashboard():
         meta = db.get_document(hacks['$id'], "metadata", "data")
         today = datetime.date(datetime.now())
         try:
-            daysLeft = abs(int(str(datetime.date(datetime.strptime(meta['startDate'], '%Y-%m-%dT%H:%M:%S.%f%z')) - today).split(" ")[0]))
+            daysLeft = (int(str(datetime.date(datetime.strptime(meta['startDate'], '%Y-%m-%dT%H:%M:%S.%f%z')) - today).split(" ")[0]))
         except:
             daysLeft = 0
         attendees = get_all_docs(hacks['$id'], "attendees")        

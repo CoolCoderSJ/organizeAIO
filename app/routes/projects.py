@@ -24,19 +24,19 @@ def create_project():
     hackathon = hackathons[0]
     hackathon_id = hackathon['hackathon_id']
 
-    data = {k: v[0] for k, v in dict(request.form).items()}
+    data = {k: v for k, v in request.form.items()}
     db.create_document(hackathon_id, "projects", "unique()", data)
     flash("Project created successfully")
     return redirect(f"/projects")
 
 @app.post('/hackathon/<id>/projects/edit/<project_id>')
 def edit_project(id, project_id):
-    data = {k: v[0] for k, v in dict(request.form).items()}
+    data = {k: v for k, v in request.form.items()}
     db.update_document(id, "projects", project_id, data)
     return redirect(f"/hackathon/{id}/projects")
 
 @app.post('/hackathon/<id>/projects/add')
 def add_project(id):
-    data = {k: v[0] for k, v in dict(request.form).items()}
+    data = {k: v for k, v in request.form.items()}
     db.create_document(id, "projects", "unique()", data)
     return redirect(f"/hackathon/{id}/projects")
