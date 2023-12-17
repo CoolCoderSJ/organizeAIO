@@ -163,8 +163,9 @@
                         {% for attr in attrs['attributes'] %}
                         {% if attr['key'] != "checkedIn" %}
                         <div> 
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ attr['key'] | title }}</label>
+
                             {% if form[attr['key']]["type"] != "checkbox" and form[attr['key']]["type"] != "radio" %}
-                            <label for="{{ attr['key'] }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ attr['key'] | title }}</label>
                             
                                 <div style="display: flex; gap: 5px; align-items: center;">
                                 <input type="{{ form[attr['key']]["type"] }}" name="{{ attr['key'] }}" id="{{ attr['key'] }}_edit" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -232,7 +233,6 @@
     </div>
 {% endfor %}
 
-</div>
 
 
 <div id="create_attendee_drawer" class="fixed top-0 left-0 z-40 w-full h-screen max-w-xs p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label" aria-hidden="true">
@@ -246,8 +246,9 @@
             {% for attr in attrs['attributes'] %}
             {% if attr['key'] != "checkedIn" %}
             <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ attr['key'] | title }}</label>
+
                 {% if form[attr['key']]["type"] != "checkbox" and form[attr['key']]["type"] != "radio" %}
-                <label for="{{ attr['key'] }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ attr['key'] | title }}</label>
 
                 <div style="display: flex; gap: 5px; align-items: center;">
                 <input type="{{ form[attr['key']]["type"] }}" name="{{ attr['key'] }}" id="{{ attr['key'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
