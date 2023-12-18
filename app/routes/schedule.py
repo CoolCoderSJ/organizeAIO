@@ -4,8 +4,31 @@ from datetime import datetime
 
 @app.route("/hackathon/<hid>/schedule")
 def schedule(hid):
+    hacks = db.get(hid)
+    meta = db.get_document(hacks['$id'], "metadata", "data")
+
+    data = {
+        "id": hacks['$id'],
+        "name": meta['name'],
+    }
+
     schedule = get_all_docs(hid, "schedule")
-    return render_template("schedule.html", schedule=schedule)
+    s = []
+    for i in schedule:
+        i['startDateTime'] = datetime.strptime(i['startDateTime'], '%Y-%m-%dT%H:%M:%S.%f%z')
+        i['endDateTime'] = datetime.strptime(i['endDateTime'], '%Y-%m-%dT%H:%M:%S.%f%z')
+        s.append(i)
+    schedule = sorted(s, key=lambda x: x['startDateTime'])
+    s1 = []
+    for i in schedule:
+        i['originalStart'] = str(i['startDateTime']).replace(" ", "T").split("+")[0]
+        i['originalEnd'] = str(i['endDateTime']).replace(" ", "T").split("+")[0]
+        i['startDateTime'] = i['startDateTime'].strftime('%m/%d %I:%M %p')
+        i['endDateTime'] = i['endDateTime'].strftime('%m/%d %I:%M %p')
+        s1.append(i)
+    schedule = s1
+
+    return render_template("schedule.html", schedule=schedule, data=data)
 
 @app.post("/hackathon/<hackathon_id>/schedule/delete/<schedule_id>")
 def delete_schedule_item(hackathon_id, schedule_id):
