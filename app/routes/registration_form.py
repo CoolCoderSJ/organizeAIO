@@ -4,6 +4,11 @@ from datetime import datetime
 
 @app.route("/hackathon/<hid>/form")
 def registration_form(hid):
+    user = session['user']
+    teamIds = db.get_document(hid, "metadata", "data")['teamIds']
+    if not hid.startswith(user) and user not in teamIds:
+        return abort(403)
+
     form = get_all_docs(hid, "registration_form")
     hacks = db.get(hid)
     meta = db.get_document(hacks['$id'], "metadata", "data")
@@ -22,6 +27,11 @@ def registration_form(hid):
 
 @app.post("/hackathon/<hackathon_id>/form/delete/<form_id>")
 def delete_form_field(hackathon_id, form_id):
+    user = session['user']
+    teamIds = db.get_document(hackathon_id, "metadata", "data")['teamIds']
+    if not hackathon_id.startswith(user) and user not in teamIds:
+        return abort(403)
+
     field_name = db.get_document(hackathon_id, "registration_form", form_id)['field_name']
     order = db.get_document(hackathon_id, "metadata", "data")['form_order']
     order.remove(form_id)
@@ -34,6 +44,11 @@ def delete_form_field(hackathon_id, form_id):
 
 @app.post("/hackathon/<hackathon_id>/form/edit/<form_id>")
 def edit_form_field(hackathon_id, form_id):
+    user = session['user']
+    teamIds = db.get_document(hackathon_id, "metadata", "data")['teamIds']
+    if not hackathon_id.startswith(user) and user not in teamIds:
+        return abort(403)
+
     data = {k: v for k, v in request.form.items()}
     data['options'] = data['options'].replace(", ", ",").split(',')
     if data['required'] == "Yes": data['required'] = True
@@ -56,6 +71,11 @@ def edit_form_field(hackathon_id, form_id):
 
 @app.post("/hackathon/<hackathon_id>/form/add")
 def add_form_field(hackathon_id):
+    user = session['user']
+    teamIds = db.get_document(hackathon_id, "metadata", "data")['teamIds']
+    if not hackathon_id.startswith(user) and user not in teamIds:
+        return abort(403)
+
     data = {k: v for k, v in request.form.items()}
     data['options'] = data['options'].replace(", ", ",").split(',')
     if data['required'] == "Yes": data['required'] = True
@@ -72,6 +92,11 @@ def add_form_field(hackathon_id):
 
 @app.post("/hackathon/<hackathon_id>/reorder")
 def reorder_form_fields(hackathon_id):
+    user = session['user']
+    teamIds = db.get_document(hackathon_id, "metadata", "data")['teamIds']
+    if not hackathon_id.startswith(user) and user not in teamIds:
+        return abort(403)
+        
     order = request.form['order']
     print(order)
     if not order: return redirect(f"/hackathon/{hackathon_id}/form")

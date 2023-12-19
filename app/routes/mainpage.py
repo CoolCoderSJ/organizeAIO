@@ -4,6 +4,11 @@ from datetime import datetime
 
 @app.route("/hackathon/<id>")
 def hackathon(id):
+    user = session['user']
+    teamIds = db.get_document(id, "metadata", "data")['teamIds']
+    if not id.startswith(user) and user not in teamIds:
+        return abort(403)
+
     hacks = db.get(id)
     meta = db.get_document(hacks['$id'], "metadata", "data")
     today = datetime.date(datetime.now())

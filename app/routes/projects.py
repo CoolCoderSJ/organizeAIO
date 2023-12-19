@@ -7,6 +7,11 @@ from werkzeug.utils import secure_filename
 
 @app.route('/hackathon/<hid>/projects')
 def projects(hid):
+    user = session['user']
+    teamIds = db.get_document(hid, "metadata", "data")['teamIds']
+    if not hid.startswith(user) and user not in teamIds:
+        return abort(403)
+
     hacks = db.get(hid)
     meta = db.get_document(hacks['$id'], "metadata", "data")
 
@@ -23,6 +28,11 @@ def projects(hid):
 
 @app.post('/hackathon/<id>/projects/delete/<project_id>')
 def delete_project(id, project_id):
+    user = session['user']
+    teamIds = db.get_document(id, "metadata", "data")['teamIds']
+    if not id.startswith(user) and user not in teamIds:
+        return abort(403)
+
     db.delete_document(id, "projects", project_id)
     return redirect(f"/hackathon/{id}/projects")
 
@@ -45,6 +55,11 @@ def create_project():
 
 @app.post('/hackathon/<id>/projects/edit/<project_id>')
 def edit_project(id, project_id):
+    user = session['user']
+    teamIds = db.get_document(id, "metadata", "data")['teamIds']
+    if not id.startswith(user) and user not in teamIds:
+        return abort(403)
+
     data = {k: v for k, v in request.form.items()}
     data['owner'] = data['owner'].replace(", ", ",").split(",")
     data['links'] = data['links'].replace(", ", ",").split(",")

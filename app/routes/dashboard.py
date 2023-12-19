@@ -6,8 +6,15 @@ from datetime import datetime
 def dashboard():
     user = session['user']
     all_dbs = db.list(search=user)
+    h = [hack for hack in all_dbs['databases']]
+    all_dbs = db.list()
+    for db in all_dbs:
+        metadata = db.get_document(db['$id'], "metadata", "data")
+        if user in metadata['teamIds']:
+            h.append(db)
+            
     hackathons = []
-    for hacks in all_dbs['databases']:
+    for hacks in h:
         meta = db.get_document(hacks['$id'], "metadata", "data")
         today = datetime.date(datetime.now())
         try:
