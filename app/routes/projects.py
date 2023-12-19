@@ -1,11 +1,25 @@
 from flask import render_template, session, redirect, request, flash
-from app import app, db, get_all_docs, Query
+from app import app, db, get_all_docs, Query, storage
+from appwrite.input_file import InputFile
 from datetime import datetime
+import base64, os
+from werkzeug.utils import secure_filename
 
-@app.route('/hackathon/<id>/projects')
-def projects(id):
-    projects = get_all_docs(id, "projects")
-    return render_template("projects.html", projects=projects)
+@app.route('/hackathon/<hid>/projects')
+def projects(hid):
+    hacks = db.get(hid)
+    meta = db.get_document(hacks['$id'], "metadata", "data")
+
+    data = {
+        "id": hacks['$id'],
+        "name": meta['name'],
+    }
+    projects = get_all_docs(hid, "projects")
+    images = {}
+    for project in projects:
+        images[project['$id']] = base64.b64encode(storage.get_file_view(hid, project['coverId'])).decode("utf-8")
+
+    return render_template("projects.html", projects=projects, data=data, images=images)
 
 @app.post('/hackathon/<id>/projects/delete/<project_id>')
 def delete_project(id, project_id):
@@ -32,11 +46,18 @@ def create_project():
 @app.post('/hackathon/<id>/projects/edit/<project_id>')
 def edit_project(id, project_id):
     data = {k: v for k, v in request.form.items()}
-    db.update_document(id, "projects", project_id, data)
-    return redirect(f"/hackathon/{id}/projects")
+    data['owner'] = data['owner'].replace(", ", ",").split(",")
+    data['links'] = data['links'].replace(", ", ",").split(",")
+    if 'file' in request.files:
+        print("file found!")
+        file = request.files['file']
+        if file:
+            filename = secure_filename(file.filename)
+            print(os.getcwd())
+            file.save(os.path.join("app/uploads", filename))
+            result = storage.create_file(id, 'unique()', InputFile.from_path(os.path.join("app/uploads", filename)))
+            data['coverId'] = result['$id']
+            os.remove(os.path.join("app/uploads", filename))
 
-@app.post('/hackathon/<id>/projects/add')
-def add_project(id):
-    data = {k: v for k, v in request.form.items()}
-    db.create_document(id, "projects", "unique()", data)
+    db.update_document(id, "projects", project_id, data)
     return redirect(f"/hackathon/{id}/projects")

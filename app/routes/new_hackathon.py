@@ -72,8 +72,7 @@ def new_hackathon():
     db.create_string_attribute(hackathon_id, "projects", "name", 100, False, None)
     db.create_string_attribute(hackathon_id, "projects", "owner", 9999, False, None, True)
     db.create_string_attribute(hackathon_id, "projects", "description", 999, False, None)
-    db.create_url_attribute(hackathon_id, "projects", "codeLink", False, None)
-    db.create_url_attribute(hackathon_id, "projects", "slides", False, None)
+    db.create_url_attribute(hackathon_id, "projects", "links", False, None, True)
     db.create_string_attribute(hackathon_id, "projects", "coverId", 100, False, None)
 
 
