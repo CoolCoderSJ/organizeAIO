@@ -9,6 +9,9 @@ from werkzeug.utils import secure_filename
 def projects(hid):
     user = session['user']
     teamIds = db.get_document(hid, "metadata", "data")['teamIds']
+    judgeIds = db.get_document(hid, "metadata", "data")['judgeIds']
+    if user in judgeIds:
+        return redirect("/hackathon/"+hid+"/judging")
     if not hid.startswith(user) and user not in teamIds:
         return abort(403)
 

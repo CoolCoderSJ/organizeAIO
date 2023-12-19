@@ -8,10 +8,11 @@ def dashboard():
     all_dbs = db.list(search=user)
     h = [hack for hack in all_dbs['databases']]
     all_dbs = db.list()
-    for db in all_dbs:
-        metadata = db.get_document(db['$id'], "metadata", "data")
+    for d in all_dbs['databases']:
+        if d['$id'] == "data": continue
+        metadata = db.get_document(d['$id'], "metadata", "data")
         if user in metadata['teamIds']:
-            h.append(db)
+            h.append(d)
             
     hackathons = []
     for hacks in h:

@@ -6,6 +6,9 @@ from datetime import datetime
 def hackathon(id):
     user = session['user']
     teamIds = db.get_document(id, "metadata", "data")['teamIds']
+    judgeIds = db.get_document(id, "metadata", "data")['judgeIds']
+    if user in judgeIds:
+        return redirect("/hackathon/"+id+"/judging")
     if not id.startswith(user) and user not in teamIds:
         return abort(403)
 

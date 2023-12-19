@@ -79,7 +79,7 @@ def new_hackathon():
     db.create_string_attribute(hackathon_id, "judging", "judgeId", 100, False, None)
     db.create_string_attribute(hackathon_id, "judging", "projectId", 100, False, None)
     db.create_string_attribute(hackathon_id, "judging", "score", 100, False, None)
-    db.create_string_attribute(hackathon_id, "judging", "comment", 100, False, None)
+    db.create_string_attribute(hackathon_id, "judging", "comment", 500, False, None)
 
     formField_name = db.create_document(hackathon_id, "registration_form", "unique()", {
         "field_name": "name",

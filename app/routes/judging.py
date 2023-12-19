@@ -11,7 +11,31 @@ def judging(hid):
         return abort(403)
         
     projects = get_all_docs(hid, "projects")
-    return render_template("judging.html", projects=projects)
+    
+    hacks = db.get(hid)
+    meta = db.get_document(hacks['$id'], "metadata", "data")
+
+    data = {
+        "id": hacks['$id'],
+        "name": meta['name'],
+    }
+
+    scores = get_all_docs(hid, "judging")
+    p_s = {}
+    judgeScore = None
+    for project in projects:
+        p_s[project['$id']] = []
+        for score in scores:
+            if score['judgeId'] == user:
+                judgeScore = score
+            if score['projectId'] == project['$id']:
+                p_s[project['$id']].append(score['score'])
+
+    for project in projects:
+        project['scores'] = p_s[project['$id']]
+
+    isJudge = user in judgeIds
+    return render_template("judging.html", projects=projects, data=data, scores=scores, p_s=p_s, isJudge=isJudge, judgeScore=judgeScore)
 
 @app.post("/hackathon/<hid>/judging/submitScore/<projectId>")
 def submitScore(hid, projectId):
@@ -27,7 +51,7 @@ def submitScore(hid, projectId):
     db.create_document(hid, "judging", "unique()", {
         "judgeId": judgeId,
         "projectId": projectId,
-        "score": score,
+        "score": str(score),
         "comment": comment
     })
     return redirect("/hackathon/" + hid + "/judging")
@@ -47,7 +71,7 @@ def updateScore(hid, projectId):
     db.update_document(hid, "judging", scoreId, {
         "judgeId": judgeId,
         "projectId": projectId,
-        "score": score,
+        "score": str(score),
         "comment": comment
     })
     return redirect("/hackathon/" + hid + "/judging")
