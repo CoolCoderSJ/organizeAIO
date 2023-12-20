@@ -11,7 +11,7 @@ def dashboard():
     for d in all_dbs['databases']:
         if d['$id'] == "data": continue
         metadata = db.get_document(d['$id'], "metadata", "data")
-        if user in metadata['teamIds']:
+        if user in metadata['teamIds'] or metadata['judgeIds']:
             h.append(d)
             
     hackathons = []

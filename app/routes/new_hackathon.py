@@ -1,6 +1,7 @@
 from flask import render_template, session, redirect, request
 from app import app, db, get_all_docs, storage
 from datetime import datetime
+import uuid 
 
 @app.route("/new/hackathon", methods=['POST'])
 def new_hackathon():
@@ -11,8 +12,8 @@ def new_hackathon():
 
 
     user = session['user']
-    hackathon_id = f'{user}{name}'
-    hackathon_id = "".join([s for s in hackathon_id if s.isalnum()])
+    hackathon_id = f'{user}{name[:5]}'
+    hackathon_id = ("".join([s for s in hackathon_id if s.isalnum()]) + str(uuid.uuid4().hex))[:36]
 
     storage.create_bucket(hackathon_id, hackathon_id, None, None, True, 10000000, None, None, None, True)
     
@@ -23,6 +24,7 @@ def new_hackathon():
     db.create_collection(hackathon_id, "schedule", "schedule")
     db.create_collection(hackathon_id, "projects", "projects")
     db.create_collection(hackathon_id, "judging", "judging")
+    db.create_collection(hackathon_id, "messages", "messages")
 
     db.create_string_attribute(hackathon_id, "metadata", "name", 200, False, name)
     db.create_datetime_attribute(hackathon_id, "metadata", "startDate", False, startDate)
@@ -50,7 +52,6 @@ def new_hackathon():
     db.create_string_attribute(hackathon_id, "attendees", "name", 100, False, None)
     db.create_string_attribute(hackathon_id, "attendees", "email", 100, False, None)
     db.create_boolean_attribute(hackathon_id, "attendees", "checkedIn", False, False)
-
 
     db.create_string_attribute(hackathon_id, "registration_form", "field_name", 100, False, None)
     # one of - color, date, datetime-local, email, number, radio, range, tel, text, time, url
@@ -80,6 +81,14 @@ def new_hackathon():
     db.create_string_attribute(hackathon_id, "judging", "projectId", 100, False, None)
     db.create_string_attribute(hackathon_id, "judging", "score", 100, False, None)
     db.create_string_attribute(hackathon_id, "judging", "comment", 500, False, None)
+
+    # one of - uncheckedin, checkedin, all_attendees
+    db.create_string_attribute(hackathon_id, "messages", "to", 100, False, None)
+    db.create_string_attribute(hackathon_id, "messages", "from", 100, False, None)
+    db.create_string_attribute(hackathon_id, "messages", "message", 999, False, None)
+    db.create_string_attribute(hackathon_id, "messages", "subject", 100, False, None)
+
+    db.create_index(hackathon_id, 'attendees', 'checkedIn', 'key', ["checkedIn"], ['ASC'])
 
     formField_name = db.create_document(hackathon_id, "registration_form", "unique()", {
         "field_name": "name",

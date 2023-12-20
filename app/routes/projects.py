@@ -45,7 +45,7 @@ def create_project():
     if not host.endswith("organizeaio.xyz"):
         return redirect("https://organizeaio.xyz")
     slug = request.host.replace("organizeaio.xyz", "")
-    hackathons = db.list_documents("data", "data", [Query.equal("slug", slug)])['documents']
+    hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
     if len(hackathons) != 1:
         return redirect("https://organizeaio.xyz")
     hackathon = hackathons[0]

@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+{% include "navigation.html" %}
+
+<div class="mx-auto ml-[300px] max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 flex justify-between mr-24">
+    <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Settings</h2>
+</div>
+
+<div class="mx-auto ml-[300px] max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 grid gap-4 grid-cols-3 sm:grid-cols-2">
+    <form action="/hackathon/{{ data['id'] }}/settings" enctype="multipart/form-data" method="post" class="w-full">
+        <div class="space-y-4">
+            <div>
+                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                <input type="text" name="name" id="name" value="{{ meta['name'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Hackathon name" required="">
+            </div>
+            <div>
+                <label for="slug" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Slug</label>
+                <input type="text" name="slug" id="slug" value="{{ slug }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Slug" required="">
+            </div>
+            <div>
+                <label for="startDate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start Date/Time</label>
+                <input type="datetime-local" name="startDate" id="startDate" value="{{ (meta['startDate']|string).replace(" ", "T").split("+")[0] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter Event Start Date" required="">
+            </div>
+            <div>
+                <label for="endDate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">End Date/Time</label>
+                <input type="datetime-local" name="endDate" id="endDate" value="{{ (meta['endDate']|string).replace(" ", "T").split("+")[0] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter Event End Date" required="">
+            </div>
+            <div>
+                <label for="location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location</label>
+                <input type="text" name="location" id="location" value="{{ meta['location'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Hackathon Location" required="">
+            </div>
+            <div>
+                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description (optional - this will be shown to participants)</label>
+                <textarea id="description" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your description...">{{ meta['description'] if meta['description'] else "" }}</textarea>
+            </div>
+
+            <div>
+                <label for="judgingCriteria" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judging Criteria (optional - this will be shown to participants and judges)</label>
+                <textarea id="judgingCriteria" name="judgingCriteria" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter the judging criteria...">{{ meta['judgingCriteria'] if meta['judgingCriteria'] else "" }}</textarea>
+            </div>
+
+            <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file">Upload Logo</label>
+                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file" name="file" type="file">
+            </div>
+
+            <br>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Team Access</label>
+                <input type="hidden" name="teamIds" id="team_input" value="{{ ','.join(emails.values()|list) }}">
+                <script>
+                    const remove = (id) => {
+                        console.log(id)
+                        val = document.getElementById("team_input").value
+                        val2 = document.getElementById(id).value
+
+                        val = val.replace(val2, "").replace(",,", ",")
+                        document.getElementById("team_input").value = val
+                        document.getElementById(id).parentElement.remove()
+                    }
+
+                    const update = (id) => {
+                        document.getElementById(id).setAttribute("value", document.getElementById(id).value)
+                        allInputs = document.getElementsByClassName("teamid_input")
+                        links = []
+                        for (let i = 0; i < allInputs.length; i++) {
+                            links.push(allInputs[i].value)
+                        }
+                        document.getElementById("team_input").value = links.join(",")
+                    }
+
+                    const add = () => {
+                        document.getElementById("team_container").innerHTML += `
+                        <div class="flex gap-4" style="align-items: center;">
+                            <input type="email"  id="teamid_input_${document.getElementsByClassName("teamid_input").length}" class="teamid_input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 mb-2" onkeyup=update(this.id) placeholder="Email" required="">
+                            <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove("teamid_input_${document.getElementsByClassName("teamid_input").length}")></i>
+                        </div>
+                        `
+                    }
+                </script>
+
+                <div id="team_container">
+                {% for user in meta['teamIds'] %}
+                <div class="flex gap-4" style="align-items: center;">
+                    <input type="email" value="{{ emails[user] }}" id="teamid_input_{{ meta['teamIds'].index(user) }}" class="teamid_input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 mb-2" onkeyup=update(this.id) placeholder="Email" required="">
+                    <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove("teamid_input_{{ meta['teamIds'].index(user) }}")></i>
+                </div>
+                {% endfor %}
+                </div>
+
+                <a onclick="add()" class="font-medium text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 cursor-pointer" target="_blank">Add Member</a>
+            <br>
+
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Judges</label>
+                <input type="hidden" name="judgeIds" id="judge_input" value="{{ ','.join(emails_j.values()|list) }}">
+                <script>
+                    const remove_j = (id) => {
+                        console.log(id)
+                        val = document.getElementById("judge_input").value
+                        val2 = document.getElementById(id).value
+
+                        val = val.replace(val2, "").replace(",,", ",")
+                        document.getElementById("judge_input").value = val
+                        document.getElementById(id).parentElement.remove()
+                    }
+
+                    const update_j = (id) => {
+                        document.getElementById(id).setAttribute("value", document.getElementById(id).value)
+                        allInputs = document.getElementsByClassName("judgeid_input")
+                        links = []
+                        for (let i = 0; i < allInputs.length; i++) {
+                            links.push(allInputs[i].value)
+                        }
+                        document.getElementById("judge_input").value = links.join(",")
+                    }
+
+                    const add_j = () => {
+                        document.getElementById("judge_container").innerHTML += `
+                        <div class="flex gap-4" style="align-items: center;">
+                            <input type="email"  id="judgeid_input_${document.getElementsByClassName("judgeid_input").length}" class="judgeid_input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 mb-2" onkeyup=update_j(this.id) placeholder="Email" required="">
+                            <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove_j("judgeid_input_${document.getElementsByClassName("judgeid_input").length}")></i>
+                        </div>
+                        `
+                    }
+                </script>
+
+                <div id="judge_container">
+                {% for user in meta['judgeIds'] %}
+                <div class="flex gap-4" style="align-items: center;">
+                    <input type="email" value="{{ emails_j[user] }}" id="judgeid_input_{{ meta['judgeIds'].index(user) }}" class="judgeid_input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 mb-2" onkeyup=update_j(this.id) placeholder="Email" required="">
+                    <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove_j("judgeid_input_{{ meta['judgeIds'].index(user) }}")></i>
+                </div>
+                {% endfor %}
+                </div>
+
+                <a onclick="add_j()" class="font-medium text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 cursor-pointer" target="_blank">Add Judge</a>
+            <br><br><br>
+
+            <div class="flex pb-4 space-x-4 md:pr-4 pl-0 w-full">
+                <button type="submit" class="text-white w-full bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                    Save
+                </button>
+                <button type="button" class="text-white w-full bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" data-modal-target="delete_modal" data-modal-toggle="delete_modal">
+                    Delete Hackathon
+                </button>
+            </div>
+            
+            <br><br>
+        </div>
+    </form>
+</div>
+
+<div id="delete_modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="delete_modal">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+            <p class="mb-4 text-gray-500 dark:text-gray-300">WARNING: Deleting a hackathon is a destructive action. Please type "delete hackathon" to confirm</p>
+            <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 mb-2" onkeyup="if (this.value == 'delete hackathon') {document.getElementById('delete_button').removeAttribute('disabled'); document.getElementById('delete_button').setAttribute('class', 'inline-flex items-center text-sm px-5 py-2.5 font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800')} else {document.getElementById('delete_button').setAttribute('disabled', 'disabled'); document.getElementById('delete_button').setAttribute('class', 'text-white bg-red-400 dark:bg-red-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center')}" placeholder="Type delete hackathon to confirm">
+            <br>
+            <div class="flex justify-center items-center space-x-4">
+                <button data-modal-toggle="delete_modal" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    Cancel
+                </button>
+                <form method="post" action="/hackathon/{{ data['id'] }}/delete">
+                <button id="delete_button" disabled type="submit" class="text-white bg-red-400 dark:bg-red-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Delete
+                </button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
