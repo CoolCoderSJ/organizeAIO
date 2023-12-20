@@ -25,8 +25,11 @@ def projects(hid):
     projects = get_all_docs(hid, "projects")
     images = {}
     for project in projects:
-        images[project['$id']] = base64.b64encode(storage.get_file_view(hid, project['coverId'])).decode("utf-8")
-
+        try:
+            images[project['$id']] = base64.b64encode(storage.get_file_view(hid, project['coverId'])).decode("utf-8")
+        except:
+            images[project['$id']] = ""
+            
     return render_template("projects.html", projects=projects, data=data, images=images)
 
 @app.post('/hackathon/<id>/projects/delete/<project_id>')

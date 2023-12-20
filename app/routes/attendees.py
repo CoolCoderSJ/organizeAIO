@@ -33,6 +33,7 @@ def attendees(hid):
             "placeholder": item['placeholder']
         }
     print(form)
+    
     return render_template("attendees.html", attendees=attendees, data=data, attrs=attributes, form=form)
 
 @app.post("/hackathon/<hackathon_id>/attendees/delete/<attendee_id>")

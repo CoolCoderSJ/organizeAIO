@@ -5,7 +5,7 @@
 {% include "navigation.html" %}
 {% endif %}
 
-<div class="{% if not isJudge %} ml-[300px] {% else %} m-16 {% endif %} max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900">
+<div class="mt-12 mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900">
     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Judging</h2>
 
     <section class="bg-gray-50 dark:bg-gray-900 py-3 pr-3 sm:py-5 sm:pr-5 w-full">
@@ -67,8 +67,8 @@
                                 <td class="px-4 py-3 dark:text-white">{{ ", ".join(project['owner']) }}</td>
                                 <td class="px-4 py-3 dark:text-white">{{ ", ".join(project['scores']) }}</td>
                                 {% set total = namespace(value=0) %}{% for score in project['scores'] %}{% set total.value = total.value + score|int %}{% endfor %}
-                                <td class="px-4 py-3 dark:text-white">{{ total.value }}</td>
-                                <td class="px-4 py-3 dark:text-white">{{ (total.value / project['scores'] | count) | round(2) }}</td>
+                                <td class="px-4 py-3 dark:text-white">{% if total.value > 0 %}{{ total.value }}{% else %}--{% endif %}</td>
+                                <td class="px-4 py-3 dark:text-white">{% if project['scores'] | count != 0 %}{{ (total.value / project['scores'] | count) | round(2) }} {% else %} -- {% endif %}</td>
                                 <td class="px-4 py-3 flex items-center justify-end">
                                     <button id="{{ project['$id'] }}-dropdown-button" data-dropdown-toggle="{{ project['$id'] }}-dropdown" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
                                         <i class="fa-solid fa-ellipsis"></i>

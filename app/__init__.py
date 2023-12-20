@@ -37,6 +37,12 @@ def before_request():
 def get_all_docs(data, collection, queries=[]):
     docs = []
     offset = 0
+    while True:
+        try: 
+            queries.remove(Query.offset(offset))
+            queries.remove(Query.limit(100))
+        except:
+            break
     queries.append(Query.offset(offset))
     queries.append(Query.limit(100))
     print(queries)

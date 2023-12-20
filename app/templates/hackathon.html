@@ -3,13 +3,13 @@
 {% block content %}
 {% include "navigation.html" %}
 
-<div class="mx-auto max-w-screen-sm mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900">
+<div class="mt-12 mx-4 md:mx-24 w-full max-w-screen-sm mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900">
     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{{ data['name'] }}</h2>
-    <h2 class="mb-4 text-2xl tracking-tight text-gray-900 dark:text-white">{{ data['startDate'] }} &nbsp; to  {{ data['endDate'] }}</h2>
+    <h2 class="mb-4 text-2xl tracking-tight text-gray-900 dark:text-white">{{ data['startDate'] }} &nbsp; to &nbsp;  {{ data['endDate'] }}</h2>
     <br><br>
-<div class="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2">
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
-            <div class="p-5 w-full">
+<div class="flex flex-row flex-wrap gap-8 mb-6 lg:mb-16 w-[100vw] md:w-[90vw]">
+        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
+            <div class="p-5 w-full flex flex-col gap-[6px]">
                 <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                     <a class="text-2xl">Days Left</a>
                 </h3>
@@ -19,13 +19,68 @@
             </div>
         </div> 
 
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
-            <div class="p-5 w-full">
+        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
+            <div class="p-5 w-full flex flex-col gap-[6px]">
                 <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a class="text-2xl">Attendees</a>
+                    <a class="text-2xl" href="{{ data['id'] }}/attendees">Attendees</a>
                 </h3>
                 <div>
                     <h3 class="text-black dark:text-white text-xl mb-0">{{ data['attendees'] }}</h3>
+                </div>
+            </div>
+        </div> 
+
+        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
+            <div class="p-5 w-full flex flex-col gap-[6px]">
+                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    <a class="text-2xl" href="{{ data['id'] }}/attendees">Check Ins</a>
+                </h3>
+                <div>
+                    <h3 class="text-black dark:text-white text-xl mb-0">{{ checkedIn }}</h3>
+                </div>
+            </div>
+        </div> 
+
+        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
+            <div class="p-5 w-full flex flex-col gap-[6px]">
+                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    <a class="text-2xl" href="{{ data['id'] }}/form">Registration Fields</a>
+                </h3>
+                <div>
+                    <h3 class="text-black dark:text-white text-xl mb-0">{{ counts['registration'] }}</h3>
+                </div>
+            </div>
+        </div> 
+
+        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
+            <div class="p-5 w-full flex flex-col gap-[6px]">
+                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    <a class="text-2xl" href="{{ data['id'] }}/schedule">Schedule Items</a>
+                </h3>
+                <div>
+                    <h3 class="text-black dark:text-white text-xl mb-0">{{ counts['schedule'] }}</h3>
+                </div>
+            </div>
+        </div> 
+
+        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
+            <div class="p-5 w-full flex flex-col gap-[6px]">
+                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    <a class="text-2xl" href="{{ data['id'] }}/projects">Projects</a>
+                </h3>
+                <div>
+                    <h3 class="text-black dark:text-white text-xl mb-0">{{ counts['projects'] }}</h3>
+                </div>
+            </div>
+        </div> 
+
+        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
+            <div class="p-5 w-full flex flex-col gap-[6px]">
+                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    <a class="text-2xl" href="{{ data['id'] }}/judging">Scores Entered</a>
+                </h3>
+                <div>
+                    <h3 class="text-black dark:text-white text-xl mb-0">{{ counts['judging'] }}</h3>
                 </div>
             </div>
         </div> 
