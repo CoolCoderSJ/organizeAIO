@@ -48,6 +48,10 @@ def new_hackathon():
     # SSL OR STARTTLS
     db.create_string_attribute(hackathon_id, "metadata", "smtp_auth_method", 100, False, None)
 
+    db.create_boolean_attribute(hackathon_id, "metadata", "showProjects", False, False)
+    db.create_boolean_attribute(hackathon_id, "metadata", "showScores", False, False)
+    db.create_boolean_attribute(hackathon_id, "metadata", "allowProjectCreation", False, True)
+
 
     db.create_string_attribute(hackathon_id, "attendees", "name", 100, False, None)
     db.create_string_attribute(hackathon_id, "attendees", "email", 100, False, None)

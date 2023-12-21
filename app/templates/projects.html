@@ -5,6 +5,37 @@
 
 <div class="mt-12 mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 flex justify-between mr-24">
     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Projects</h2>
+
+    <div class="flex gap-4 h-full">
+    {% if data['showProjects'] %}
+    <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/hide">
+        <button class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+            Hide Public Project Gallery
+        </button>
+    </form>
+    {% else %}
+    <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/show">
+        <button class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+            Show Public Project Gallery
+        </button>
+    </form>
+    {% endif %}
+
+
+    {% if data['allowProjectCreation'] %}
+    <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/dontallowcreation">
+        <button class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+            Close Project Submission
+        </button>
+    </form>
+    {% else %}
+    <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/allowcreation">
+        <button class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+            Allow Project Submission
+        </button>
+    </form>
+    {% endif %}
+    </div>
 </div>
 
 <div class="mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 grid gap-4 md:grid-cols-3 grid-cols-1">
@@ -101,7 +132,7 @@
                         document.getElementById("links_container__{{ item['$id'] }}").innerHTML += `
                         <div class="flex gap-4" style="align-items: center;">
                             <input type="url" id="{{ item['$id'] }}__link_${document.getElementsByClassName("{{ item['$id'] }}__link").length}" class="{{ item['$id'] }}__link bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 mb-2" onkeyup=update(this.id) placeholder="Link" required="">
-                            <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove('{{ item['$id'] }}__link_${document.getElementsByClassName("6580ab6ad0ce1cf30394__link").length}')></i>
+                            <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove('{{ item['$id'] }}__link_${document.getElementsByClassName("{{ item['$id'] }}__link").length}')></i>
                         </div>
                         `
                     }
