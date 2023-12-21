@@ -28,6 +28,7 @@ def hackathon(id):
         "attendees": len(attendees),
         "startDate": datetime.strptime(meta['startDate'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%m/%d/%Y"),
         "endDate": datetime.strptime(meta['endDate'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%m/%d/%Y"),
+        "slug": db.get_document("data", "data", id)['slug']
     }
 
     checekdIn = len(get_all_docs(id, "attendees", [Query.equal("checkedIn", True)]))

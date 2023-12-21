@@ -30,11 +30,11 @@ def new_hackathon():
     db.create_datetime_attribute(hackathon_id, "metadata", "startDate", False, startDate)
     db.create_datetime_attribute(hackathon_id, "metadata", "endDate", False, endDate)
     db.create_string_attribute(hackathon_id, "metadata", "location", 200, False, location)
-    db.create_string_attribute(hackathon_id, "metadata", "description", 999, False, None)
+    db.create_string_attribute(hackathon_id, "metadata", "description", 9999, False, None)
     db.create_string_attribute(hackathon_id, "metadata", "logoId", 999, False, None)
     db.create_string_attribute(hackathon_id, "metadata", "teamIds", 999, False, None, True)
     db.create_string_attribute(hackathon_id, "metadata", "judgeIds", 999, False, None, True)
-    db.create_string_attribute(hackathon_id, "metadata", "judgingCriteria", 999, False, None)
+    db.create_string_attribute(hackathon_id, "metadata", "judgingCriteria", 9999, False, None)
     db.create_string_attribute(hackathon_id, "metadata", "slug", 100, False, None)
     # list of attribute keys from attendees collection, maintain order in list when rendering page
     db.create_string_attribute(hackathon_id, "metadata", "form_order", 999, False, None, True)

@@ -1,6 +1,9 @@
 from flask import render_template, session, redirect, request, flash
 from app import app, db, get_all_docs, Query, users, storage
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import os
+from appwrite.input_file import InputFile
 
 @app.get("/hackathon/<hid>/settings")
 def settigns_get(hid):
@@ -37,6 +40,7 @@ def saveSettings(hid):
         return abort(403)
     
     data = {k: v for k, v in request.form.items()}
+    data['description'] = data['description'].replace("\r", "")
 
     slug = data['slug']
     del data['slug']
@@ -79,7 +83,7 @@ def saveSettings(hid):
             filename = secure_filename(file.filename)
             print(os.getcwd())
             file.save(os.path.join("app/uploads", filename))
-            result = storage.create_file(id, 'unique()', InputFile.from_path(os.path.join("app/uploads", filename)))
+            result = storage.create_file(hid, 'unique()', InputFile.from_path(os.path.join("app/uploads", filename)))
             data['logoId'] = result['$id']
             os.remove(os.path.join("app/uploads", filename))
 
