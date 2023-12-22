@@ -1,6 +1,80 @@
-from flask import render_template, session, redirect, request
-from app import app, db, get_all_docs
+from flask import render_template, session, redirect, request, flash
+from app import app, db, get_all_docs, Query
 from datetime import datetime
+
+@app.route("/register")
+def public_registration():
+    host = request.host
+    print(host)
+    if not host.endswith("organizeaio.shuchir.dev"):
+        return redirect("https://organizeaio.shuchir.dev")
+    slug = request.host.replace(".organizeaio.shuchir.dev", "")
+    print(slug)
+    hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
+    if len(hackathons) != 1:
+        return redirect("https://organizeaio.shuchir.dev")
+    hackathon = hackathons[0]
+    hackathon_id = hackathon['hackathon_id']
+    meta = db.get_document(hackathon_id, "metadata", "data")
+    data = {
+        "id": hackathon_id,
+        "name": meta['name'],
+    }
+
+
+    attributes = db.list_attributes(hackathon_id, 'attendees')
+
+    registration = get_all_docs(hackathon_id, "registration_form") 
+    order = meta['form_order']
+    form_n = []
+    for i in order:
+        elem = next(item for item in registration if item["$id"] == i)
+        form_n.append(elem)
+    registration = form_n
+
+    form = {}
+    for item in registration:
+        form[item['field_name']] = {
+            "type": item['type'],
+            "required": item['required'],
+            "options": item['options'],
+            "default": item['default'],
+            "placeholder": item['placeholder']
+        }
+
+    print(attributes)
+    attr_n = []
+    for i in order:
+        elem = next(item['field_name'] for item in registration if item["$id"] == i)
+        elem = next(item for item in attributes['attributes'] if item["key"] == elem)
+        print(elem)
+        attr_n.append(elem)
+
+    attributes['attributes'] = attr_n
+    
+    return render_template("public_registration.html", form=form, attrs=attributes, data=data)
+
+
+@app.post("/register")
+def public_register():
+    host = request.host
+    print(host)
+    if not host.endswith("organizeaio.shuchir.dev"):
+        return redirect("https://organizeaio.shuchir.dev")
+    slug = request.host.replace(".organizeaio.shuchir.dev", "")
+    print(slug)
+    hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
+    if len(hackathons) != 1:
+        return redirect("https://organizeaio.shuchir.dev")
+    hackathon = hackathons[0]
+    hackathon_id = hackathon['hackathon_id']
+
+    data = {k: v for k, v in request.form.items()}
+    db.create_document(hackathon_id, "attendees", "unique()", data)
+
+    flash("You have successfully been registered!")
+    return redirect("/register")
+
 
 @app.route("/hackathon/<hid>/form")
 def registration_form(hid):
