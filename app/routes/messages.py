@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect, request
+from flask import render_template, session, redirect, request, flash
 from app import app, db, get_all_docs, Query
 from datetime import datetime
 import smtplib
