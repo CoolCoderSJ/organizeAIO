@@ -30,6 +30,7 @@
                 <label for="location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location</label>
                 <input type="text" name="location" id="location" value="{{ meta['location'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Hackathon Location" required="">
             </div>
+
             <div>
                 <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description (optional - this will be shown to participants)</label>
                 <textarea id="description" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your description...">{{ meta['description'] if meta['description'] else "" }}</textarea>
@@ -134,7 +135,40 @@
                 </div>
 
                 <a onclick="add_j()" class="font-medium text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 cursor-pointer" target="_blank">Add Judge</a>
-            <br><br><br>
+            <br><br>
+            <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">SMTP Settings</label>
+            <div>
+                <label for="smtp_host" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Host</label>
+                <input type="text" name="smtp_host" id="smtp_host" value="{{ meta['smtp_host'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Host" required="">
+            </div>
+            <div>
+                <label for="smtp_port" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Port</label>
+                <input type="text" name="smtp_port" id="smtp_port" value="{{ meta['smtp_port'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Port" required="">
+            </div>
+            <div>
+                <label for="smtp_username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                <input type="text" name="smtp_username" id="smtp_username" value="{{ meta['smtp_username'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Username" required="">
+            </div>
+            <div>
+                <label for="smtp_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                <input type="text" name="smtp_password" id="smtp_password" value="{{ meta['smtp_password'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Password" required="">
+            </div>
+            <div>
+                <label for="smtp_from" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">From Email Address</label>
+                <input type="email" name="smtp_from" id="smtp_from" value="{{ meta['smtp_from'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="From email address" required="">
+            </div>
+            <div>
+                <label for="smtp_from_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name to Show as Sender</label>
+                <input type="text" name="smtp_from_name" id="smtp_from_name" value="{{ meta['smtp_from_name'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Name to show as sender" required="">
+            </div>
+            <div>
+                <label for="smtp_auth_method" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Auth Method</label>
+                <select id="smtp_auth_method" name="smtp_auth_method" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                    <option {% if meta['smtp_auth_method'] == "ssl" %}selected{% endif %}>SSL</option>
+                    <option {% if meta['smtp_auth_method'] == "starttls" %}selected{% endif %}>STARTTLS</option>
+                  </select>
+            </div>
+            <br>
 
             <div class="flex pb-4 space-x-4 md:pr-4 pl-0 w-full">
                 <button type="submit" class="text-white w-full bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">

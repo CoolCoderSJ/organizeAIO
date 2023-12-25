@@ -30,11 +30,11 @@ def new_hackathon():
     db.create_datetime_attribute(hackathon_id, "metadata", "startDate", False, startDate)
     db.create_datetime_attribute(hackathon_id, "metadata", "endDate", False, endDate)
     db.create_string_attribute(hackathon_id, "metadata", "location", 200, False, location)
-    db.create_string_attribute(hackathon_id, "metadata", "description", 9999, False, None)
+    db.create_string_attribute(hackathon_id, "metadata", "description", 500, False, None)
     db.create_string_attribute(hackathon_id, "metadata", "logoId", 999, False, None)
     db.create_string_attribute(hackathon_id, "metadata", "teamIds", 999, False, None, True)
     db.create_string_attribute(hackathon_id, "metadata", "judgeIds", 999, False, None, True)
-    db.create_string_attribute(hackathon_id, "metadata", "judgingCriteria", 9999, False, None)
+    db.create_string_attribute(hackathon_id, "metadata", "judgingCriteria", 500, False, None)
     db.create_string_attribute(hackathon_id, "metadata", "slug", 100, False, None)
     # list of attribute keys from attendees collection, maintain order in list when rendering page
     db.create_string_attribute(hackathon_id, "metadata", "form_order", 999, False, None, True)
@@ -56,6 +56,7 @@ def new_hackathon():
     db.create_string_attribute(hackathon_id, "attendees", "name", 100, False, None)
     db.create_string_attribute(hackathon_id, "attendees", "email", 100, False, None)
     db.create_boolean_attribute(hackathon_id, "attendees", "checkedIn", False, False)
+
 
     db.create_string_attribute(hackathon_id, "registration_form", "field_name", 100, False, None)
     # one of - color, date, datetime-local, email, number, radio, range, tel, text, time, url
@@ -87,12 +88,17 @@ def new_hackathon():
     db.create_string_attribute(hackathon_id, "judging", "comment", 500, False, None)
 
     # one of - uncheckedin, checkedin, all_attendees
-    db.create_string_attribute(hackathon_id, "messages", "to", 100, False, None)
+    db.create_string_attribute(hackathon_id, "messages", "emailFields", 100, False, None, True)
+    db.create_string_attribute(hackathon_id, "messages", "conditions", 100, False, None, True)
     db.create_string_attribute(hackathon_id, "messages", "from", 100, False, None)
     db.create_string_attribute(hackathon_id, "messages", "message", 999, False, None)
     db.create_string_attribute(hackathon_id, "messages", "subject", 100, False, None)
 
     db.create_index(hackathon_id, 'attendees', 'checkedIn', 'key', ["checkedIn"], ['ASC'])
+    db.create_index(hackathon_id, "attendees", "name", "key", ['name'], ['ASC'])
+    db.create_index(hackathon_id, "attendees", "email", "key", ['email'], ['ASC'])
+    db.create_index(hackathon_id, "attendees", "checkedIn", "key", ['checkedIn'], ['ASC'])
+    db.create_index(hackathon_id, "registration_form", "type", "key", ['type'], ['ASC'])
 
     formField_name = db.create_document(hackathon_id, "registration_form", "unique()", {
         "field_name": "name",

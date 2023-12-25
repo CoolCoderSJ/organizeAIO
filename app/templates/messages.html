@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% block title %}Email Blasts{% endblock %}
+{% block content %}
+{% include "navigation.html" %}
+
+<div class="mt-12 mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900">
+    <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Email Blasts</h2>
+
+    <section class="bg-gray-50 dark:bg-gray-900 py-3 pr-3 sm:py-5 sm:pr-5 w-full">
+        <div class="mr-auto max-w-screen-xl">
+            <!-- Start coding here -->
+            <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden w-full h-screen">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                    <div class="w-full md:w-1/2">
+                        <form class="flex items-center">
+                            <label for="simple-search" class="sr-only">Search</label>
+                            <div class="relative w-full">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search" required="" onkeyup="search(this.value)">
+                                <script>
+                                    const search = (value) => {
+                                        const allTr = document.querySelectorAll("tr")
+                                        const searchValue = value.toLowerCase()
+                                        allTr.forEach(tr => {
+                                            if (tr.getAttribute("top") == "yes") return
+                                            const allTd = tr.querySelectorAll("td")
+                                            let match = false
+                                            allTd.forEach(td => {
+                                                const textValue = td.textContent.toLowerCase()
+                                                if (textValue.includes(searchValue)) match = true
+                                            })
+                                            if (match) tr.style.display = "table-row"
+                                            else tr.style.display = "none"
+                                        })
+                                        
+                                    }
+                                </script>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                        <button data-drawer-target="send_email_drawer" data-drawer-show="send_email_drawer" type="button" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                            <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                            </svg>
+                            Send Email
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr top="yes">
+                                <th scope="col" class="px-4 py-3">Subject</th>
+                                <th scope="col" class="px-4 py-3"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for message in messages %}
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="px-4 py-3 dark:text-white text-md">{{ message['subject'] }}</td>
+
+                                <td class="px-4 py-3 flex items-center justify-end">
+                                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline text-md cursor-pointer" data-modal-target="view_modal__{{ message['$id'] }}" data-modal-toggle="view_modal__{{ message['$id'] }}">More Details</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        </section>
+</div> 
+
+{% for message in messages %}
+<div id="view_modal__{{ message['$id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    View Email Blast
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="view_modal__{{ message['$id'] }}">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email Fields</label>
+                    {% for field in message['emailFields'] %}
+                    <input type="text" value="{{ field }}" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <div class="grid grid-cols-3">
+                        <div>
+                            <label class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Condition</label>
+                            {% for condition in message['conditions'] %}
+                                <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ fieldToName[condition.split("(")[0]] }}</p>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Attribute</label>
+                            {% for condition in message['conditions'] %}
+                                <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ condition.split("(")[1].split(",")[0].replace('"', "") }}</p>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Value</label>
+                            {% for condition in message['conditions'] %}
+                                <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ condition.split("(")[1].split(", ")[1].replace('["', "").replace('"])', "") }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div>
+                    <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject Line</label>
+                    <input type="text" id="subject" value="{{ message['subject'] }}" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                </div>
+
+                <div>
+                    <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
+                    <textarea id="message" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>{{ message['message'] }}</textarea>
+                </div>
+
+                <div class="flex items-center space-x-4 mt-6">
+                    <button type="button" data-modal-toggle="view_modal__{{ message['$id'] }}" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                        Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div id="send_email_drawer" class="fixed top-0 left-0 z-40 h-screen w-full max-w-xs p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label" aria-hidden="true">
+    <h5 id="drawer-label" class="inline-flex items-center mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">Send Email</h5>
+    <button type="button" data-drawer-dismiss="send_email_drawer" aria-controls="send_email_drawer" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        <span class="sr-only">Close menu</span>
+    </button>
+    <form action="/hackathon/{{ data['id'] }}/messages/new" method="post">
+        <div class="space-y-4">
+            <div>
+                <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject Line</label>
+                <input type="text" name="subject" id="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Subject Line" required="">
+            </div>
+            <div>
+                <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
+                <textarea type="text" name="message" id="message" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Message" required=""></textarea>
+            </div>
+
+            <br>
+            <label class="block mb-0 text-sm font-medium text-gray-900 dark:text-white">Email Fields</label>
+            <input type="hidden" name="fields" id="fields">
+            <script>
+                const remove = (id) => {
+                    console.log(id)
+                    val = document.getElementById("fields").value
+                    val2 = document.getElementById(id).value
+
+                    val = val.replace(val2, "").replace("||", "|")
+                    document.getElementById("fields").value = val
+                    document.getElementById(id).parentElement.remove()
+                }
+
+                const update = (id) => {
+                    document.getElementById(id).setAttribute("value", document.getElementById(id).value)
+                    allInputs = document.getElementsByClassName("field_input")
+                    links = []
+                    for (let i = 0; i < allInputs.length; i++) {
+                        links.push(allInputs[i].value)
+                    }
+                    document.getElementById("fields").value = links.join("|")
+                }
+
+                const add = () => {
+                    document.getElementById("fields_container").innerHTML += `
+                    <div class="flex gap-4 mb-2" style="align-items: center;">
+                        <select onchange="update(this.id)" id="field_input_${document.getElementsByClassName('field_input').length}" class="field_input border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                            {% for field in emailFields %}
+                            <option value="{{ field['field_name'] }}">{{ field['field_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                        <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove("field_input_${document.getElementsByClassName('field_input').length}")></i>
+                    </div>`
+                }
+            </script>
+
+            <div id="fields_container">
+            </div>
+
+            <a onclick="add()" class="font-medium text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 cursor-pointer" target="_blank">Add Field</a>
+            <br>
+
+            <br>
+            <label class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Queries</label>
+            <input type="hidden" name="conditions" id="conditions">
+            <script>
+                const remove_c = (id) => {
+                    console.log(id)
+                    val = document.getElementById("conditions").value
+                    val2 = document.getElementById(id).value
+
+                    val = val.replace(val2, "").replace("||", "|")
+                    document.getElementById("conditions").value = val
+                    document.getElementById(id).parentElement.remove()
+                }
+
+                const update_c = (id) => {
+                    document.getElementById(id).setAttribute("value", document.getElementById(id).value)
+                    allInputs = document.getElementsByClassName("condition_input")
+                    links = []
+                    for (let i = 0; i < allInputs.length; i++) {
+                        links.push(allInputs[i].value)
+                    }
+                    document.getElementById("conditions").value = links.join("|")
+                }
+
+                const add_c = () => {
+                    document.getElementById("conditions_container").innerHTML += `
+                    <div class="flex gap-4 mb-2" style="align-items: center;">
+                        <input placeholder="Query" onkeyup="update_c(this.id)" id="condition_input_${document.getElementsByClassName('condition_input').length}" class="condition_input border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                        <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove_c("condition_input_${document.getElementsByClassName('condition_input').length}")></i>
+                    </div>`
+                }
+            </script>
+
+            <div id="conditions_container">
+            </div>
+
+            <a onclick="add_c()" class="font-medium text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 cursor-pointer" target="_blank">Add Condition</a>
+            <br><br>
+
+            <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">A Guide to Queries</label>
+            <p class="dark:text-white">All values in double quotes must remain in double quotes.</p>
+            <p class="dark:text-white text-sm"><b>equal("attribute_name", ["value"])</b> - Finds attendees where attribute_name equals "value"</p>
+            <p class="dark:text-white text-sm"><b>notEqual("attribute_name", ["value"])</b> - Finds attendees where attribute_name does not equal "value"</p>
+            <p class="dark:text-white text-sm"><b>lessThan("attribute_name", [value])</b> - Finds attendees where attribute_name is less than value</p>
+            <p class="dark:text-white text-sm"><b>lessThanEqual("attribute_name", [value])</b> - Finds attendees where attribute_name is less than or equal to value</p>
+            <p class="dark:text-white text-sm"><b>greaterThan("attribute_name", [value])</b> - Finds attendees where attribute_name is greater than value</p>
+            <p class="dark:text-white text-sm"><b>greaterThanEqual("attribute_name", [value])</b> - Finds attendees where attribute_name is greater than or equal to value</p>
+
+            <div class="flex justify-center w-full pb-4 space-x-4 md:px-4">
+                <button type="submit" class="text-white w-full justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                    Send Email
+                </button>
+                <button type="button" data-drawer-dismiss="send_email_drawer" aria-controls="send_email_drawer" class="inline-flex w-full justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    <svg aria-hidden="true" class="w-5 h-5 -ml-1 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    Cancel
+                </button>
+            </div>
+    </form>
+</div>
+
+{% endblock %}

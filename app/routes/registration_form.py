@@ -1,6 +1,7 @@
 from flask import render_template, session, redirect, request, flash
 from app import app, db, get_all_docs, Query
 from datetime import datetime
+from time import sleep
 
 @app.route("/register")
 def public_registration():
@@ -117,6 +118,7 @@ def delete_form_field(hackathon_id, form_id):
     })
     db.delete_document(hackathon_id, "registration_form", form_id)
     db.delete_attribute(hackathon_id, "attendees", field_name)
+    db.delete_index(hackathon_id, "attendees", field_name)
     return redirect(f"/hackathon/{hackathon_id}/form")
 
 @app.post("/hackathon/<hackathon_id>/form/edit/<form_id>")
@@ -143,7 +145,10 @@ def edit_form_field(hackathon_id, form_id):
 
     if len(notInCurrent) > 0:
         db.delete_attribute(hackathon_id, "attendees", notInCurrent[0])
+        db.delete_index(hackathon_id, "attendees", notInCurrent[0])
         db.create_string_attribute(hackathon_id, "attendees", data['field_name'], 100, False, None)
+        sleep(0.5)
+        db.create_index(hackathon_id, "attendees", notInCurrent[0], "key", [notInCurrent[0]], ['ASC'])
     return redirect(f"/hackathon/{hackathon_id}/form")
 
 @app.post("/hackathon/<hackathon_id>/form/add")
@@ -165,6 +170,8 @@ def add_form_field(hackathon_id):
         "form_order": order
     })
     db.create_string_attribute(hackathon_id, "attendees", data['field_name'], 100, False, None)
+    sleep(0.5)
+    db.create_index(hackathon_id, "attendees", data['field_name'], "key", [data['field_name']], ['ASC'])
     return redirect(f"/hackathon/{hackathon_id}/form")
 
 @app.post("/hackathon/<hackathon_id>/reorder")
