@@ -49,6 +49,9 @@
           <a id="messages" href="/hackathon/{{ data['id'] }}/messages" class="{{ nonactiveClass }}">Email Blasts</a>
         </li>
         <li>
+          <a id="finances" href="/hackathon/{{ data['id'] }}/finances" class="{{ nonactiveClass }}">Finances</a>
+        </li>
+        <li>
           <a id="projects" href="/hackathon/{{ data['id'] }}/projects" class="{{ nonactiveClass }}">Projects</a>
         </li>
         <li>
@@ -65,7 +68,7 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-        <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+        <div class="p-4 mt-4 mx-4 md:mx-24 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
             {{ message }}
         </div>
         {% endfor %}

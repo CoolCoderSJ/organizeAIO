@@ -51,6 +51,7 @@ def new_hackathon():
     db.create_boolean_attribute(hackathon_id, "metadata", "showProjects", False, False)
     db.create_boolean_attribute(hackathon_id, "metadata", "showScores", False, False)
     db.create_boolean_attribute(hackathon_id, "metadata", "allowProjectCreation", False, True)
+    db.create_string_attribute(hackathon_id, "metadata", "hcb_slug", 50, False, None)
 
 
     db.create_string_attribute(hackathon_id, "attendees", "name", 100, False, None)
