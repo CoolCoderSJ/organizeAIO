@@ -26,11 +26,10 @@
                 <div style="align-items: center" class="w-full md:w-[50%] mb-6 rounded-lg">
                         <h3 class="mb-2 text-xl tracking-tight font-bold text-gray-900 dark:text-white">{{ item['name'] }} {% if item['location'] %}@{%endif%} {{ item['location'] }}</h3>
                         <p class="mb-4 text-lg tracking-tight text-gray-900 dark:text-white">{{ item['startDateTime'] }} <span class="font-semibold">to</span> {{ item['endDateTime'] }}</p>
-                        <br>
                 </div>
                 {% endfor %}
-                <h3 class="mb-4 text-3xl tracking-tight font-bold text-gray-900 dark:text-white">Judging Criteria</h3>
-                <p class="mb-4 text-lg tracking-tight text-gray-900 dark:text-gray-200">{% if meta['judgingCriteria'] %}{{ meta['judgingCriteria'] }}{% else %}No judging criteria available.{% endif %}</p>
+                <h3 class="mb-0 text-3xl tracking-tight font-bold text-gray-900 dark:text-white">Judging Criteria</h3>
+                <p class="mb-4 text-lg tracking-tight text-gray-900 dark:text-gray-200">{% if meta['judgingCriteria'] %}{{ meta['judgingCriteria'] | safe }}{% else %}No judging criteria available.{% endif %}</p>
             </div>
         </div> 
     </div>

@@ -36,7 +36,14 @@ def get_messages(hid):
         "endsWith": "Ends With",
     }
 
-    # print("message conditions", messages[1]['conditions'])
+    smtp_data = ['smtp_host', 'smtp_port', 'smtp_username', 'smtp_password', 'smtp_from', 'smtp_from_name', 'smtp_auth_method']
+    for field in smtp_data:
+        if not meta[field]:
+            flash("Your SMTP settings are misconfigured. Blasts will not be sent until you fix SMTP settings under the settings page.")
+            break
+    
+    if len(emailFields) == 0:
+        flash("You don't have any email attributes. You won't be able to send email blasts until you add one.")
 
     return render_template('messages.html', messages=messages, data=data, emailFields=emailFields, meta=meta, attrs=attributes, fieldToName=fieldToName)
 
