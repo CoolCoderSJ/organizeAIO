@@ -98,7 +98,6 @@ def new_hackathon():
     db.create_index(hackathon_id, 'attendees', 'checkedIn', 'key', ["checkedIn"], ['ASC'])
     db.create_index(hackathon_id, "attendees", "name", "key", ['name'], ['ASC'])
     db.create_index(hackathon_id, "attendees", "email", "key", ['email'], ['ASC'])
-    db.create_index(hackathon_id, "attendees", "checkedIn", "key", ['checkedIn'], ['ASC'])
     db.create_index(hackathon_id, "registration_form", "type", "key", ['type'], ['ASC'])
 
     formField_name = db.create_document(hackathon_id, "registration_form", "unique()", {
