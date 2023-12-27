@@ -148,7 +148,7 @@ def edit_form_field(hackathon_id, form_id):
         db.delete_index(hackathon_id, "attendees", notInCurrent[0])
         db.create_string_attribute(hackathon_id, "attendees", data['field_name'], 100, False, None)
         sleep(0.5)
-        db.create_index(hackathon_id, "attendees", notInCurrent[0], "key", [notInCurrent[0]], ['ASC'])
+        db.create_index(hackathon_id, "attendees", data['field_name'], "key", [data['field_name']], ['ASC'])
     return redirect(f"/hackathon/{hackathon_id}/form")
 
 @app.post("/hackathon/<hackathon_id>/form/add")
