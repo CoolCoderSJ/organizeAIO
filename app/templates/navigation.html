@@ -31,34 +31,34 @@
       {% set activeClass = "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" %}
       <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
         <li>
-          <a href="/" class="{{ nonactiveClass }}">Home</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-home" href="/" class="{{ nonactiveClass }}">Home</a>
         </li>
         <li>
-          <a id="overview" href="/hackathon/{{ data['id'] }}" class="{{ nonactiveClass }}">Overview</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-overview" id="overview" href="/hackathon/{{ data['id'] }}" class="{{ nonactiveClass }}">Overview</a>
         </li>
         <li>
-          <a id="attendees" href="/hackathon/{{ data['id'] }}/attendees" class="{{ nonactiveClass }}">Attendees</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-attendees" id="attendees" href="/hackathon/{{ data['id'] }}/attendees" class="{{ nonactiveClass }}">Attendees</a>
         </li>
         <li>
-          <a id="form" href="/hackathon/{{ data['id'] }}/form" class="{{ nonactiveClass }}">Registration Form</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-form" id="form" href="/hackathon/{{ data['id'] }}/form" class="{{ nonactiveClass }}">Registration Form</a>
         </li>
         <li>
-          <a id="schedule" href="/hackathon/{{ data['id'] }}/schedule" class="{{ nonactiveClass }}">Schedule</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-schedule" id="schedule" href="/hackathon/{{ data['id'] }}/schedule" class="{{ nonactiveClass }}">Schedule</a>
         </li>
         <li>
-          <a id="messages" href="/hackathon/{{ data['id'] }}/messages" class="{{ nonactiveClass }}">Email Blasts</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-blasts" id="messages" href="/hackathon/{{ data['id'] }}/messages" class="{{ nonactiveClass }}">Email Blasts</a>
         </li>
         <li>
-          <a id="finances" href="/hackathon/{{ data['id'] }}/finances" class="{{ nonactiveClass }}">Finances</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-finances" id="finances" href="/hackathon/{{ data['id'] }}/finances" class="{{ nonactiveClass }}">Finances</a>
         </li>
         <li>
-          <a id="projects" href="/hackathon/{{ data['id'] }}/projects" class="{{ nonactiveClass }}">Projects</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-projects" id="projects" href="/hackathon/{{ data['id'] }}/projects" class="{{ nonactiveClass }}">Projects</a>
         </li>
         <li>
-          <a id="judging" href="/hackathon/{{ data['id'] }}/judging" class="{{ nonactiveClass }}">Judging</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-judging" id="judging" href="/hackathon/{{ data['id'] }}/judging" class="{{ nonactiveClass }}">Judging</a>
         </li>
         <li>
-          <a id="settings" href="/hackathon/{{ data['id'] }}/settings" class="{{ nonactiveClass }}">Settings</a>
+          <a data-umami-event="navigate" data-umami-event-action="nav-settings" id="settings" href="/hackathon/{{ data['id'] }}/settings" class="{{ nonactiveClass }}">Settings</a>
         </li>
       </ul>
     </div>
