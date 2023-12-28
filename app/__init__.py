@@ -31,7 +31,7 @@ Session(app)
 
 @app.before_request
 def before_request():
-    if 'user' not in session and request.path not in ['', '/', '/login', '/register', '/logout'] and not request.path.startswith("static") and not request.path.startswith("project") and request.host == "organizeaio.shuchir.dev":
+    if 'user' not in session and request.path not in ['', '/', '/login', '/register', '/logout'] and not request.path.startswith("static") and not request.path.startswith("project") and request.host == "organizeaio.xyz":
         return redirect("/")
 
 def get_all_docs(data, collection, queries=[]):

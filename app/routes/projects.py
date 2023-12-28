@@ -103,13 +103,13 @@ def delete_project(id, project_id):
 def create_project_get():
     host = request.host
     print(host)
-    if not host.endswith("organizeaio.shuchir.dev"):
-        return redirect("https://organizeaio.shuchir.dev")
-    slug = request.host.replace(".organizeaio.shuchir.dev", "")
+    if not host.endswith("organizeaio.xyz"):
+        return redirect("https://organizeaio.xyz")
+    slug = request.host.replace(".organizeaio.xyz", "")
     print(slug)
     hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
     if len(hackathons) != 1:
-        return redirect("https://organizeaio.shuchir.dev")
+        return redirect("https://organizeaio.xyz")
     hackathon = hackathons[0]
     hackathon_id = hackathon['hackathon_id']
     meta = db.get_document(hackathon_id, "metadata", "data")
@@ -133,12 +133,12 @@ def create_project_get():
 @app.post('/projects/new')
 def create_project():
     host = request.host
-    if not host.endswith("organizeaio.shuchir.dev"):
-        return redirect("https://organizeaio.shuchir.dev")
-    slug = request.host.replace(".organizeaio.shuchir.dev", "")
+    if not host.endswith("organizeaio.xyz"):
+        return redirect("https://organizeaio.xyz")
+    slug = request.host.replace(".organizeaio.xyz", "")
     hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
     if len(hackathons) != 1:
-        return redirect("https://organizeaio.shuchir.dev")
+        return redirect("https://organizeaio.xyz")
     hackathon = hackathons[0]
     hackathon_id = hackathon['hackathon_id']
 
