@@ -144,27 +144,27 @@
             <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">SMTP Settings</label>
             <div>
                 <label for="smtp_host" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Host</label>
-                <input type="text" name="smtp_host" id="smtp_host" value="{{ str(meta['smtp_host']).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Host">
+                <input type="text" name="smtp_host" id="smtp_host" value="{{ (meta['smtp_host'] | string).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Host">
             </div>
             <div>
                 <label for="smtp_port" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Port</label>
-                <input type="text" name="smtp_port" id="smtp_port" value="{{ str(meta['smtp_port']).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Port">
+                <input type="text" name="smtp_port" id="smtp_port" value="{{ (meta['smtp_port'] | string).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Port">
             </div>
             <div>
                 <label for="smtp_username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                <input type="text" name="smtp_username" id="smtp_username" value="{{ str(meta['smtp_username']).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Username">
+                <input type="text" name="smtp_username" id="smtp_username" value="{{ (meta['smtp_username'] | string).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Username">
             </div>
             <div>
                 <label for="smtp_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                <input type="text" name="smtp_password" id="smtp_password" value="{{ str(meta['smtp_password']).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Password">
+                <input type="text" name="smtp_password" id="smtp_password" value="{{ (meta['smtp_password'] | string).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="SMTP Password">
             </div>
             <div>
                 <label for="smtp_from" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">From Email Address</label>
-                <input type="email" name="smtp_from" id="smtp_from" value="{{ str(meta['smtp_from']).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="From email address">
+                <input type="email" name="smtp_from" id="smtp_from" value="{{ (meta['smtp_from'] | string).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="From email address">
             </div>
             <div>
                 <label for="smtp_from_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name to Show as Sender</label>
-                <input type="text" name="smtp_from_name" id="smtp_from_name" value="{{ str(meta['smtp_from_name']).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Name to show as sender">
+                <input type="text" name="smtp_from_name" id="smtp_from_name" value="{{ (meta['smtp_from_name'] | string).replace("None", "") }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Name to show as sender">
             </div>
             <div>
                 <label for="smtp_auth_method" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Auth Method</label>
