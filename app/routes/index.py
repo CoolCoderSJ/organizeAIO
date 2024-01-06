@@ -55,6 +55,7 @@ def index_route():
         s1.append(i)
     schedule = s1
     
-    meta['judgingCriteria'] = "<div class='text-white'>" + clean_html(meta['judgingCriteria']).replace("\n", "<br>")+"</div>"
+    try: meta['judgingCriteria'] = "<div class='text-white'>" + clean_html(meta['judgingCriteria']).replace("\n", "<br>")+"</div>"
+    except: meta['judgingCriteria'] = ""
 
     return render_template("public.html", data=data, meta=meta, schedule=schedule)
