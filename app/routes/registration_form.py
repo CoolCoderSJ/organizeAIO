@@ -40,7 +40,8 @@ def public_registration():
             "required": item['required'],
             "options": item['options'],
             "default": item['default'],
-            "placeholder": item['placeholder']
+            "placeholder": item['placeholder'],
+            "description": item['description']
         }
 
     print(attributes)

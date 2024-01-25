@@ -39,6 +39,7 @@
         <i class="fa-solid fa-grip-vertical" style="color: white; cursor: grab;"></i>
         <div>
             <h3 class="mb-4 text-3xl tracking-tight font-bold text-gray-900 dark:text-white">{{ item['placeholder'] }}</h3>
+            <p class="mb-4 text-xl tracking-tight font-bold text-gray-900 dark:text-white">{{ item['description'] }}</p>
             <div class="flex gap-4">
                 <button id="editAttrButton" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" type="button" data-modal-target="edit_q_drawer__{{ item['$id'] }}" data-modal-toggle="edit_q_drawer__{{ item['$id'] }}">
                     Edit Question
@@ -100,6 +101,11 @@
                     <div>
                         <label for="question" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question</label>
                         <input type="text" value="{{ item['placeholder'] }}" name="placeholder" id="question" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter the question shown to participants" required="">
+                    </div>
+
+                    <div>
+                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">description</label>
+                        <input type="text" value="{{ item['description'] }}" name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Question description">
                     </div>
         
                     <div>
@@ -176,6 +182,11 @@
             <div>
                 <label for="question" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question</label>
                 <input type="text" name="placeholder" id="question" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter the question shown to participants" required="">
+            </div>
+
+            <div>
+                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                <input type="text" name="description id="description class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Question description" required="">
             </div>
 
             <div>
