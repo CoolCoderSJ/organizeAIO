@@ -29,11 +29,15 @@ def finances(hid):
     raised = "$0"
 
     if hcb_slug:
-        r = requests.get(f"https://hcb.hackclub.com/api/v3/organizations/{hcb_slug}") 
-        org = r.json()
-        total = '${:,.2f}'.format(org['balances']['balance_cents']/100)
-        raised = '${:,.2f}'.format(org['balances']['total_raised']/100)
-
+        try:
+            r = requests.get(f"https://hcb.hackclub.com/api/v3/organizations/{hcb_slug}") 
+            org = r.json()
+            total = '${:,.2f}'.format(org['balances']['balance_cents']/100)
+            raised = '${:,.2f}'.format(org['balances']['total_raised']/100)
+        except KeyError:
+            total = 0
+            raised = 0
+            
         t = requests.get(f"https://hcb.hackclub.com/api/v3/organizations/{hcb_slug}/transactions?page={page}")
         if t.status_code != 200: return redirect(f"/hackathon/{hid}/finances?page={page-1}")
         t = t.json()
