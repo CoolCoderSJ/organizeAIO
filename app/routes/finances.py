@@ -41,7 +41,7 @@ def finances(hid):
         t = requests.get(f"https://hcb.hackclub.com/api/v3/organizations/{hcb_slug}/transactions?page={page}")
         if t.status_code != 200: return redirect(f"/hackathon/{hid}/finances?page={page-1}")
         t = t.json()
-        if len(t) == 0 and page > 1: return redirect(f"/hackathon/{hid}/finances?page={page-1}")
+        if type(t) == list and len(t) == 0 and page > 1: return redirect(f"/hackathon/{hid}/finances?page={page-1}")
         for transaction in t:
             transactions.append({
                 "memo": transaction['memo'],
