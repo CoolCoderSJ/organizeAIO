@@ -28,11 +28,9 @@
                         {% for attr in attrs['attributes'] %}
                         {% if attr['key'] != "checkedIn" %}
                         <div>
-                            <br>
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ form[attr['key']]['placeholder'] }}</label>
                             {% if form[attr['key']]["description"] %}
-                            <label class="block mb-2 text-sm text-gray-900 dark:text-white">{{ form[attr['key']]['description'] }}</label>
-                            <br>
+                            <label class="block mb-4 text-sm text-gray-900 dark:text-white">{{ form[attr['key']]['description'] }}</label>
                             {% endif %}
 
                             {% if form[attr['key']]["type"] != "checkbox" and form[attr['key']]["type"] != "radio" %}
