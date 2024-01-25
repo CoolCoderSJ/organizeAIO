@@ -36,7 +36,7 @@
 <ul class="mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 sortable">
     {% for item in form %}
     <li id="{{ item['$id'] }}" style="list-style: none; align-items: center" class="border-primary-800 py-8 px-8 border w-full md:w-[50%] mb-6 rounded-lg flex gap-8">
-        <i class="fa-solid fa-grip-vertical" style="color: white; cursor: grab;"></i>
+        <i class="fa-solid fa-grip-vertical dark:text-white" style="cursor: grab;"></i>
         <div>
             <h3 class="mb-4 text-3xl tracking-tight font-bold text-gray-900 dark:text-white">{{ item['placeholder'] }}</h3>
            {% if item['description'] %} <p class="mb-4 text-xl tracking-tight text-gray-900 dark:text-white">{{ item['description'] }}</p>{% endif %}
