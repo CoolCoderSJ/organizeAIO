@@ -66,6 +66,7 @@ def new_hackathon():
     db.create_string_attribute(hackathon_id, "registration_form", "options", 100, False, None, True)
     db.create_string_attribute(hackathon_id, "registration_form", "placeholder", 100, False, None)
     db.create_string_attribute(hackathon_id, "registration_form", "default", 100, False, None)
+    db.create_string_attribute(hackathon_id, "registration_form", "description", 500, False, None)
     db.create_boolean_attribute(hackathon_id, "registration_form", "required", False, False)
 
 
