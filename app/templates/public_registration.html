@@ -7,17 +7,6 @@
     <div class="pb-8 px-4 mx-4 md:mx-24 max-w-screen-xl lg:py-16 lg:px-6 w-screen md:w-[80vw]">
         <div class="max-w-screen-sm mb-8 lg:mb-16 w-screen md:w-[80vw]">
 
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            {% endif %}
-            {% endwith %}
-
-
             <div class="flex justify-between w-screen md:w-[80vw]" style="align-items: center;">
                 <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Register</h2>
             </div>

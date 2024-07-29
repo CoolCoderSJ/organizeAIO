@@ -196,7 +196,7 @@
                             <option value="{{ field['field_name'] }}">{{ field['field_name'] }}</option>
                             {% endfor %}
                         </select>
-                        <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove("field_input_${document.getElementsByClassName('field_input').length}")></i>
+                        <i class="fa-solid fa-circle-xmark mb-2 dark:text-white cursor-pointer" onclick=remove("field_input_${document.getElementsByClassName('field_input').length}")></i>
                     </div>`
                 }
             </script>
@@ -235,7 +235,7 @@
                     document.getElementById("conditions_container").innerHTML += `
                     <div class="flex gap-4 mb-2" style="align-items: center;">
                         <input placeholder="Query" onkeyup="update_c(this.id)" id="condition_input_${document.getElementsByClassName('condition_input').length}" class="condition_input border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                        <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove_c("condition_input_${document.getElementsByClassName('condition_input').length}")></i>
+                        <i class="fa-solid fa-circle-xmark mb-2 dark:text-white cursor-pointer" onclick=remove_c("condition_input_${document.getElementsByClassName('condition_input').length}")></i>
                     </div>`
                 }
             </script>
