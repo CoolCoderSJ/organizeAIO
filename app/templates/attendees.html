@@ -6,8 +6,13 @@
 <div class="mt-20 mx-12">
     <h1 class="text-foreground mb-2 text-4xl uk-text-bold">Attendees</h1>
     <div class="mt-12 flex justify-between items-center">
-        <input class="uk-input w-[90%]" placeholder="Search..." onkeyup="search(this.value)">
-        <button class="uk-button uk-button-primary" uk-toggle="target: #create_drawer"><i class="fa-solid fa-plus"></i> &nbsp; Add</button>
+        <input class="uk-input w-[80%]" placeholder="Search..." onkeyup="search(this.value)">
+        <div class="flex gap-4">
+            <button class="uk-button uk-button-primary" uk-toggle="target: #create_drawer"><i class="fa-solid fa-plus"></i> &nbsp; Add</button>
+            <form method="post" action="/hackathon/{{ data['id'] }}/attendees/download">
+                <button class="uk-button uk-button-default"><i class="fa-solid fa-download"></i> &nbsp; Download</button>
+            </form>
+        </div>
         <script>
             const search = (value) => {
                 const allTr = document.querySelectorAll("tr")

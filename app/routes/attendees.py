@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect, request
+from flask import render_template, session, redirect, request, Response
 from app import app, db, get_all_docs
 from datetime import datetime
 
@@ -87,3 +87,37 @@ def add_attendee(hackathon_id):
     data = {k: v for k, v in request.form.items()}
     db.create_document(hackathon_id, "attendees", "unique()", data)
     return redirect(f"/hackathon/{hackathon_id}/attendees")
+
+@app.post("/hackathon/<hackathon_id>/attendees/download")
+def downloadAsCsvFile(hackathon_id):
+    user = session['user']
+    teamIds = db.get_document(hackathon_id, "metadata", "data")['teamIds']
+    if not hackathon_id.startswith(user) and user not in teamIds:
+        return abort(403)
+    
+    attendees = get_all_docs(hackathon_id, "attendees")
+    registration = get_all_docs(hackathon_id, "registration_form")
+    form = {}
+    for item in registration:
+        form[item['field_name']] = {
+            "type": item['type'],
+            "required": item['required'],
+            "options": item['options'],
+            "default": item['default'],
+            "placeholder": item['placeholder']
+        }
+
+    csv = ""
+    for item in form:
+        csv += item + ","
+    csv += "Checked In\n"
+    for attendee in attendees:
+        for item in form:
+            csv += attendee[item] + ","
+        csv += str(attendee['checkedIn']) + "\n"
+
+    return Response(
+        csv,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=attendees.csv"})
