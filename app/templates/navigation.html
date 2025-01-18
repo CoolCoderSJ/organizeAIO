@@ -1,66 +1,45 @@
-
-
-<nav class="bg-white border-gray-200 dark:bg-gray-900">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="/hackathon/{{ data['id'] }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">{{ data['name'] }}</span>
-    </a>
-    <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
-        <span class="sr-only">Open main menu</span>
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
-    </button>
-    <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-      <script>
-        window.onload = () => {
-        let activeClass = "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
-        let nonactiveClass = "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-
-        window.path = window.location.pathname.split("/");
-        if (path.length == 3) {
-          path = "overview"
-        }
-        else {
-          path = path[3]
-        }
-        document.getElementById(path).setAttribute("class", activeClass);
-      }
-      </script>
-      {% set nonactiveClass = "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" %}
-      {% set activeClass = "block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" %}
-      <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+<div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
+  <nav class="uk-navbar-container my-4 mx-8" uk-navbar>
+    <div class="uk-navbar-left">
+      <h3 class="text-2xl">{{ data['name'] }}</h3>
+    </div>
+    <div class="uk-navbar-right">
+      <ul class="uk-navbar-nav">
+        <li><a data-umami-event="navigate" data-umami-event-navigate="nav-overview" id="overview" href="/hackathon/{{ data['id'] }}">Overview</a></li>
         <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-overview" id="overview" href="/hackathon/{{ data['id'] }}" class="{{ nonactiveClass }}">Overview</a>
-        </li>
-        <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-attendees" id="attendees" href="/hackathon/{{ data['id'] }}/attendees" class="{{ nonactiveClass }}">Attendees</a>
-        </li>
-        <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-form" id="form" href="/hackathon/{{ data['id'] }}/form" class="{{ nonactiveClass }}">Registration Form</a>
-        </li>
-        <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-schedule" id="schedule" href="/hackathon/{{ data['id'] }}/schedule" class="{{ nonactiveClass }}">Schedule</a>
-        </li>
-        <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-blasts" id="messages" href="/hackathon/{{ data['id'] }}/messages" class="{{ nonactiveClass }}">Email Blasts</a>
-        </li>
-        <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-finances" id="finances" href="/hackathon/{{ data['id'] }}/finances" class="{{ nonactiveClass }}">Finances</a>
-        </li>
-        <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-projects" id="projects" href="/hackathon/{{ data['id'] }}/projects" class="{{ nonactiveClass }}">Projects</a>
-        </li>
-        <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-judging" id="judging" href="/hackathon/{{ data['id'] }}/judging" class="{{ nonactiveClass }}">Judging</a>
-        </li>
-        <li>
-          <a data-umami-event="navigate" data-umami-event-navigate="nav-settings" id="settings" href="/hackathon/{{ data['id'] }}/settings" class="{{ nonactiveClass }}">Settings</a>
+          <a href="#">More</a>
+          <div class="uk-navbar-dropdown">
+            <ul class="uk-nav uk-navbar-dropdown-nav">
+              <li><a data-umami-event="navigate" data-umami-event-navigate="nav-attendees" id="attendees" href="/hackathon/{{ data['id'] }}/attendees">Attendees</a></li>
+              <li><a data-umami-event="navigate" data-umami-event-navigate="nav-form" id="form" href="/hackathon/{{ data['id'] }}/form">Registration Form</a></li>
+              <li><a data-umami-event="navigate" data-umami-event-navigate="nav-schedule" id="schedule" href="/hackathon/{{ data['id'] }}/schedule">Schedule</a></li>
+              <!-- <li><a data-umami-event="navigate" data-umami-event-navigate="nav-blasts" id="messages" href="/hackathon/{{ data['id'] }}/messages">Email Blasts</a></li> -->
+              <li><a data-umami-event="navigate" data-umami-event-navigate="nav-finances" id="finances" href="/hackathon/{{ data['id'] }}/finances">Finances</a></li>
+              <li><a data-umami-event="navigate" data-umami-event-navigate="nav-projects" id="projects" href="/hackathon/{{ data['id'] }}/projects">Projects</a></li>
+              <li><a data-umami-event="navigate" data-umami-event-navigate="nav-judging" id="judging" href="/hackathon/{{ data['id'] }}/judging">Judging</a></li>
+              <li><a data-umami-event="navigate" data-umami-event-navigate="nav-settings" id="settings" href="/hackathon/{{ data['id'] }}/settings">Settings</a></li>
+            </ul>
+          </div>
         </li>
       </ul>
     </div>
-  </div>
-</nav>
+  </nav>
+</div>
+
+<script>
+  window.onload = () => {
+    let activeClass = "uk-active";
+    let nonactiveClass = "";
+
+    window.path = window.location.pathname.split("/");
+    if (path.length == 3) {
+      path = "overview";
+    } else {
+      path = path[3];
+    }
+    document.getElementById(path).classList.add(activeClass);
+  }
+</script>
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -70,4 +49,4 @@
         </div>
         {% endfor %}
     {% endif %}
-    {% endwith %}
+{% endwith %}

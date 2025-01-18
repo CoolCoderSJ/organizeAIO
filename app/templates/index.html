@@ -2,74 +2,79 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<section class="bg-white dark:bg-gray-900">
-    <div class="pb-8 px-4 mx-4 md:mx-24 max-w-screen-xl lg:py-16 lg:px-6 ">
-        <div class="mx-4 md:mx-24 max-w-screen-sm mb-8 lg:mb-16">
-            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Your Events</h2>
-            <button data-umami-event="action" data-umami-event-action="create-event-initiate" id="createEventButton" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" type="button" data-drawer-target="create_event_drawer" data-drawer-show="create_event_drawer" aria-controls="create_event_drawer">
-            Create Event
-            </button>
-            <br><br>
-        <div class="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2">
-            {% for hackathon in hackathons %}
-                <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
-                    <div class="p-5 w-full">
-                        <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            <a href="/hackathon/{{hackathon["id"]}}" class="text-2xl">{{hackathon['name']}}</a>
-                        </h3>
-                        <br>
-                        <div style="float: left">
-                            <h3 class="text-black dark:text-white font-bold text-xl mb-0">{{ hackathon['daysLeft'] }}</h3>
-                            <p class="mt-0 mb-4 font-light text-gray-700 dark:text-gray-300">Day(s) Left</p>
-                        </div>
-                        <div style="float: right">
-                            <h3 class="text-black dark:text-white font-bold text-xl mb-0 text-right">{{ hackathon['attendees'] }}</h3>
-                            <p class="mt-0 mb-4 font-light text-gray-700 dark:text-gray-300">Attendees</p>
-                        </div>
-                    </div>
-                </div> 
-            {% endfor %}
-        </div>  
-        </div> 
-    </div>
-  </section>
-
-  <div id="create_event_drawer" class="fixed top-0 left-0 z-40 w-full h-screen max-w-xs p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label" aria-hidden="true">
-    <h5 id="drawer-label" class="inline-flex items-center mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">New Event</h5>
-    <button type="button" data-drawer-dismiss="create_event_drawer" aria-controls="create_event_drawer" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
-        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-        <span class="sr-only">Close menu</span>
-    </button>
-    <form action="/new/hackathon" method="post">
-        <div class="space-y-4">
-            <div>
-                <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type event name" required="">
-            </div>
-            <div>
-                <label for="location" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Location</label>
-                <input type="text" name="location" id="location" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type event location" required="">
+<div class="p-8">
+    <div class="flex flex-1 items-center justify-center">
+        <div class="space-y-6 flex flex-col justify-center items-center">
+            <div class="flex flex-col space-y-2 text-center mt-12">
+                <h1 class="text-3xl text-foreground font-semibold tracking-tight">
+                    Your Events
+                </h1>
             </div>
 
-            <div>
-                <label for="startDate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start Date/Time</label>
-                <input type="datetime-local" name="startDate" id="startDate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter Event Start Date" required="">
-            </div>
-            <div>
-                <label for="endDate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">End Date/Time</label>
-                <input type="datetime-local" name="endDate" id="endDate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter Event End Date" required="">
-            </div>
+            <button class="uk-button uk-button-primary" uk-toggle="target: #create_drawer" type="button">Create Event</button>
+
             
-            <div class="bottom-0 left-0 flex justify-center w-full pb-4 space-x-4 md:px-4 md:absolute">
-                <button data-umami-event="action" data-umami-event-action="create-event-complete" type="submit" class="text-white w-full justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                    Create Event
-                </button>
-                <button data-umami-event="action" data-umami-event-action="create-event-cancel" type="button" data-drawer-dismiss="create_event_drawer" aria-controls="create_event_drawer" class="inline-flex w-full justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                    <svg aria-hidden="true" class="w-5 h-5 -ml-1 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    Cancel
-                </button>
+            <div class="flex flex-wrap w-full gap-4 h-full">
+                {% for hackathon in hackathons %}
+                <a href="/hackathon/{{hackathon["id"]}}" class="text-2xl uk-width-1-2@m uk-card uk-card-body uk-card-default w-[325px] h-[fit-content]">
+                    <h2 class="text-2xl uk-card-title">{{hackathon['name']}}</h2>
+                    <br>
+                    <div style="float: left">
+                        <h3 class="text-xl text-foreground">{{ hackathon['daysLeft'] }}</h3>
+                        <p class="text-lg text-muted-foreground">Day(s) Left</p>
+                    </div>
+                    <div style="float: right">
+                        <h3 class="text-xl text-foreground text-right">{{ hackathon['attendees'] }}</h3>
+                        <p class="text-lg text-muted-foreground">Attendees</p>
+                    </div>
+                </a>
+                  {% endfor %}
             </div>
-    </form>
+        </div>
+    </div>
 </div>
 
+
+<div class="uk-modal p-6" id="create_drawer" uk-modal>
+    <div class="uk-modal-body uk-modal-dialog">
+        <h2 class="uk-modal-title">Create Event</h2>
+        <button class="uk-modal-close" type="button"></button>
+
+        <form method="post" action="/new/hackathon" class="space-y-4"> 
+            <div class="uk-margin">
+                <label for="name" class="uk-form-label">Event Name</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" placeholder="Event name" name="name" required>
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <label for="location" class="uk-form-label">Event Venue</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" placeholder="Venue addr." name="location" required>
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <label for="name" class="uk-form-label">Start Date</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" placeholder="Start date" name="startDate" type="datetime-local" required>
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <label for="name" class="uk-form-label">End Date</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input" placeholder="End date" name="endDate" type="datetime-local" required>
+                </div>
+            </div>
+
+            <br>
+            <button
+            class="uk-button uk-button-primary w-full">
+            Create
+            </button> 
+    </form>
+    </div>
+</div>
 {% endblock %}

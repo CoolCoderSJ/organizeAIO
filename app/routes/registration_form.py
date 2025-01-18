@@ -7,10 +7,14 @@ from time import sleep
 def public_registration():
     host = request.host
     print(host)
-    if not host.endswith("organizeaio.xyz"):
+    if not host.endswith("organizeaio.xyz") and not host.endswith("localhost:9738"):
         return redirect("https://organizeaio.xyz")
-    slug = request.host.replace(".organizeaio.xyz", "")
+    if host.endswith("organizeaio.xyz"):
+        slug = request.host.replace(".organizeaio.xyz", "")
+    else:
+        slug = request.host.replace(".localhost:9738", "")
     print(slug)
+    
     hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
     if len(hackathons) != 1:
         return redirect("https://organizeaio.xyz")
@@ -61,9 +65,12 @@ def public_registration():
 def public_register():
     host = request.host
     print(host)
-    if not host.endswith("organizeaio.xyz"):
+    if not host.endswith("organizeaio.xyz") and not host.endswith("localhost:9738"):
         return redirect("https://organizeaio.xyz")
-    slug = request.host.replace(".organizeaio.xyz", "")
+    if host.endswith("organizeaio.xyz"):
+        slug = request.host.replace(".organizeaio.xyz", "")
+    else:
+        slug = request.host.replace(".localhost:9738", "")
     print(slug)
     hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
     if len(hackathons) != 1:
@@ -119,7 +126,8 @@ def delete_form_field(hackathon_id, form_id):
     })
     db.delete_document(hackathon_id, "registration_form", form_id)
     db.delete_attribute(hackathon_id, "attendees", field_name)
-    db.delete_index(hackathon_id, "attendees", field_name)
+    try: db.delete_index(hackathon_id, "attendees", field_name)
+    except: pass
     return redirect(f"/hackathon/{hackathon_id}/form")
 
 @app.post("/hackathon/<hackathon_id>/form/edit/<form_id>")

@@ -8,13 +8,15 @@ from lxml.html.clean import clean_html
 def index_route():
     host = request.host
     print(host)
-    if not host.endswith("organizeaio.xyz"):
+    if not host.endswith("organizeaio.xyz") and not host.endswith("localhost:9738"):
         return redirect("https://organizeaio.xyz")
-    slug = request.host.replace(".organizeaio.xyz", "")
+    if host.endswith("organizeaio.xyz"):
+        slug = request.host.replace(".organizeaio.xyz", "")
+    else:
+        slug = request.host.replace(".localhost:9738", "")
     print(slug)
     
-    if slug == "organizeaio.xyz":
-        print(session.items())
+    if slug == "organizeaio.xyz" or slug == "localhost:9738":
         if 'user' in session:
             return redirect("/dashboard")
         return render_template("landing.html")

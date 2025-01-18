@@ -3,88 +3,61 @@
 {% block content %}
 {% include "navigation.html" %}
 
-<div class="mt-12 mx-4 md:mx-24 w-full max-w-screen-sm mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900">
-    <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{{ data['name'] }}</h2>
-    <h2 class="mb-4 text-2xl tracking-tight text-gray-900 dark:text-white">{{ data['startDate'] }} &nbsp; to &nbsp;  {{ data['endDate'] }}</h2>
-    <a data-umami-event="navigate" data-umami-event-navigate="public-page" href="https://{{ data['slug'] }}.organizeaio.xyz" class="font-medium text-blue-600 dark:text-blue-500 hover:underline text-lg" target="_blank">Visit Public Page</a>
-    <br><br><br>
-<div class="flex flex-row flex-wrap gap-8 mb-6 lg:mb-16 w-[100vw] md:w-[90vw]">
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
-            <div class="p-5 w-full flex flex-col gap-[6px]">
-                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a class="text-2xl">Days Left</a>
-                </h3>
-                <div>
-                    <h3 class="text-black dark:text-white text-xl mb-0">{{ data['daysLeft'] }}</h3>
-                </div>
-            </div>
-        </div> 
+<div class="mt-12 mx-12">
+    <h1 class="text-foreground mb-2 text-4xl uk-text-bold">{{ data['name'] }}</h1>
+    <p class="text-muted-foreground text-xl mb-4"><b>{{ data['startDate'] }}</b></p>
+    <a data-umami-event="navigate" data-umami-event-navigate="public-page" class="uk-link text-foreground hover:text-muted-foreground" href="https://{{ data['slug'] }}.organizeaio.xyz" target="_blank">Launch Event Page</a>
+    <br><br>
 
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
-            <div class="p-5 w-full flex flex-col gap-[6px]">
-                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a data-umami-event="navigate" data-umami-event-navigate="home-attendees" class="text-2xl" href="{{ data['id'] }}/attendees">Attendees</a>
-                </h3>
-                <div>
-                    <h3 class="text-black dark:text-white text-xl mb-0">{{ data['attendees'] }}</h3>
-                </div>
-            </div>
-        </div> 
+    <div class="flex flex-wrap gap-[6px]">
+        <div class="uk-width-1-2@m w-[250px] uk-card uk-card-body uk-card-default">
+            <h3 class="uk-card-title text-2xl">{{ data['daysLeft'] }}</h3>
+            <p class="text-lg">
+              Days Left
+            </p>
+        </div>
 
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
-            <div class="p-5 w-full flex flex-col gap-[6px]">
-                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a data-umami-event="navigate" data-umami-event-navigate="home-checkins" class="text-2xl" href="{{ data['id'] }}/attendees">Check Ins</a>
-                </h3>
-                <div>
-                    <h3 class="text-black dark:text-white text-xl mb-0">{{ checkedIn }}</h3>
-                </div>
-            </div>
-        </div> 
+        <div class="uk-width-1-2@m w-[250px] uk-card uk-card-body uk-card-default">
+            <h3 class="uk-card-title text-2xl">{{ data['attendees'] }}</h3>
+            <p class="text-lg">
+            Attendees
+            </p>
+        </div>
 
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
-            <div class="p-5 w-full flex flex-col gap-[6px]">
-                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a data-umami-event="navigate" data-umami-event-navigate="home-form" class="text-2xl" href="{{ data['id'] }}/form">Registration Fields</a>
-                </h3>
-                <div>
-                    <h3 class="text-black dark:text-white text-xl mb-0">{{ counts['registration'] }}</h3>
-                </div>
-            </div>
-        </div> 
+        <div class="uk-width-1-2@m w-[250px] uk-card uk-card-body uk-card-default">
+            <h3 class="uk-card-title text-2xl">{{ checkedIn }}</h3>
+            <p class="text-lg">
+            Check Ins
+            </p>
+        </div>
 
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
-            <div class="p-5 w-full flex flex-col gap-[6px]">
-                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a data-umami-event="navigate" data-umami-event-navigate="home-schedule" class="text-2xl" href="{{ data['id'] }}/schedule">Schedule Items</a>
-                </h3>
-                <div>
-                    <h3 class="text-black dark:text-white text-xl mb-0">{{ counts['schedule'] }}</h3>
-                </div>
-            </div>
-        </div> 
+        <div class="uk-width-1-2@m w-[250px] uk-card uk-card-body uk-card-default">
+            <h3 class="uk-card-title text-2xl">{{ counts['registration'] }}</h3>
+            <p class="text-lg">
+            Form Fields
+            </p>
+        </div>
 
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
-            <div class="p-5 w-full flex flex-col gap-[6px]">
-                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a data-umami-event="navigate" data-umami-event-navigate="home-projects" class="text-2xl" href="{{ data['id'] }}/projects">Projects</a>
-                </h3>
-                <div>
-                    <h3 class="text-black dark:text-white text-xl mb-0">{{ counts['projects'] }}</h3>
-                </div>
-            </div>
-        </div> 
+        <div class="uk-width-1-2@m w-[250px] uk-card uk-card-body uk-card-default">
+            <h3 class="uk-card-title text-2xl">{{ counts['schedule'] }}</h3>
+            <p class="text-lg">
+            Schedule Items
+            </p>
+        </div>
 
-        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700 w-[350px] md:w-60 h-30">
-            <div class="p-5 w-full flex flex-col gap-[6px]">
-                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    <a data-umami-event="navigate" data-umami-event-navigate="home-judging" class="text-2xl" href="{{ data['id'] }}/judging">Scores Entered</a>
-                </h3>
-                <div>
-                    <h3 class="text-black dark:text-white text-xl mb-0">{{ counts['judging'] }}</h3>
-                </div>
-            </div>
-        </div> 
-</div>  
-</div> 
+        <div class="uk-width-1-2@m w-[250px] uk-card uk-card-body uk-card-default">
+            <h3 class="uk-card-title text-2xl">{{ counts['projects'] }}</h3>
+            <p class="text-lg">
+            Projects
+            </p>
+        </div>
+
+        <div class="uk-width-1-2@m w-[250px] uk-card uk-card-body uk-card-default">
+            <h3 class="uk-card-title text-2xl">{{ counts['judging'] }}</h3>
+            <p class="text-lg">
+            Scores Entered
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

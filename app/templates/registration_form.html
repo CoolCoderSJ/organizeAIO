@@ -3,23 +3,66 @@
 {% block content %}
 {% include "navigation.html" %}
 
-<div class="mt-12 mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 flex flex-col md:flex-row justify-between mr-24">
-    <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Registration Form</h2>
-
-    <div class="flex gap-2" style="align-items: center;">
-    <form method="post" action="/hackathon/{{ data['id'] }}/reorder">
-        <input type="hidden" name="order" id="order">
-    <button id="reorderButton" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" type="submit">
-        Save Question Order
-    </button>
-    </form>
-
-    <button id="createAttrButton" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" type="button" data-drawer-target="create_attribute_drawer" data-drawer-show="create_attribute_drawer" aria-controls="create_attribute_drawer">
-        New Question
-    </button>
+<div class="mt-20 mx-12">
+    <div class="flex justify-between">
+        <h1 class="text-foreground mb-2 text-4xl uk-text-bold">Registration Form</h1>
+        <div class="flex gap-2 items-center">
+            <form method="post" action="/hackathon/{{ data['id'] }}/reorder">
+                <input type="hidden" name="order" id="order">
+            <button id="reorderButton" class="uk-button uk-button-default" type="submit">
+                Save Question Order
+            </button>
+            </form>
+        
+            <button id="createAttrButton" class="uk-button uk-button-primary" type="button" uk-toggle="target: #create_drawer">
+                <i class="fa-solid fa-plus"></i> &nbsp; New
+            </button>
+        </div>
     </div>
+    <br><br>
+
+    <ul class="sortable">
+        {% for item in form %}
+        <li id="{{ item['$id'] }}" style="list-style: none; align-items: center" class="py-8 px-8 w-full md:w-[50%] mb-6 rounded-lg flex gap-8 bg-background">
+            <i class="fa-solid fa-grip-vertical text-foreground" style="cursor: grab;"></i>
+            <div class="flex justify-between w-full" style="align-items: center;">
+                <div class="flex flex-col items-center">
+                    <h3 class="text-2xl text-foreground font-bold">{{ item['placeholder'] }}</h3>
+                    {% if item['description'] %} <p class="text-muted-foreground">{{ item['description'] }}</p>{% endif %}
+                </div>
+                <div class="flex gap-2">
+                    <button id="editAttrButton" class="uk-button uk-button-default" type="button" uk-toggle="target: #edit_q_drawer__{{ item['$id'] }}">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+    
+    
+                    <button id="deleteAttrButton" class="uk-button uk-button-danger" type="button" uk-toggle="target: #delete_q_modal__{{ item['$id'] }}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+
+                    <div id="delete_q_modal__{{ item['$id'] }}" uk-modal>
+                        <div class="uk-modal-body uk-modal-dialog">
+                          <h2 class="uk-modal-title">Delete Question</h2>
+                          <p class="my-4">
+                            Are you sure you want to remove this question? This action is irreversible.
+                          </p>
+                          <p class="uk-text-right">
+                            <form method="post" action="/hackathon/{{ data['id'] }}/form/delete/{{ item['$id'] }}">
+                                <button class="uk-modal-close uk-button uk-button-default" type="button">
+                                Cancel
+                                </button>
+                                <button class="uk-button uk-button-danger" type="submit">Delete</button>
+                            </form>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>    
 </div>
-<br>
+
 
 <script>
     $(function() {
@@ -33,217 +76,152 @@
          });
 </script>
 
-<ul class="mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 sortable">
-    {% for item in form %}
-    <li id="{{ item['$id'] }}" style="list-style: none; align-items: center" class="border-primary-800 py-8 px-8 border w-full md:w-[50%] mb-6 rounded-lg flex gap-8">
-        <i class="fa-solid fa-grip-vertical dark:text-white" style="cursor: grab;"></i>
-        <div class="flex justify-between w-full" style="align-items: center;">
-            <h3 class="text-3xl tracking-tight font-bold text-gray-900 dark:text-white">{{ item['placeholder'] }}</h3>
-           {% if item['description'] %} <p class="my-4 text-xl tracking-tight text-gray-900 dark:text-white">{{ item['description'] }}</p>{% endif %}
-            <div class="flex gap-2">
-                <button id="editAttrButton" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" type="button" data-modal-target="edit_q_drawer__{{ item['$id'] }}" data-modal-toggle="edit_q_drawer__{{ item['$id'] }}">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </button>
-
-
-                <button id="deleteAttrButton" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900" type="button" data-modal-target="delete_q_modal__{{ item['$id'] }}" data-modal-toggle="delete_q_modal__{{ item['$id'] }}">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-
-                <div id="delete_q_modal__{{ item['$id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-                    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-                        <!-- Modal content -->
-                        <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                            <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="delete_q_modal__{{ item['$id'] }}">
-                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                                <span class="sr-only">Close modal</span>
-                            </button>
-                            <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                            <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to remove this question?</p>
-                            <div class="flex justify-center items-center space-x-4">
-                                <button data-modal-toggle="delete_q_modal__{{ item['$id'] }}" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                    No, cancel
-                                </button>
-                                <form method="post" action="/hackathon/{{ data['id'] }}/form/delete/{{ item['$id'] }}">
-                                <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                    Yes, I'm sure
-                                </button>
-                                </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-        </div>
-    </li>
-    {% endfor %}
-</ul>
-
-
 {% for item in form %}
-<div id="edit_q_drawer__{{ item['$id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-            <!-- Modal header -->
-            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Update Question
-                </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="edit_q_drawer__{{ item['$id'] }}">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <form action="/hackathon/{{ data['id'] }}/form/edit/{{ item['$id'] }}" method="post">
-                <div class="space-y-4">
-                    <div>
-                        <label for="question" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question</label>
-                        <input type="text" value="{{ item['placeholder'] }}" name="placeholder" id="question" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter the question shown to participants" required="">
-                    </div>
+<div id="edit_q_drawer__{{ item['$id'] }}" uk-offcanvas="overlay: true">
+    <div class="uk-offcanvas-bar uk-padding">
+        <button class="uk-offcanvas-close" type="button" uk-close></button>
+        
+        <h3 class="text-2xl my-8">Update Question</h3>
+        <form method="post" action="/hackathon/{{ data['id'] }}/form/edit/{{ item['$id'] }}">
+            <div class="grid gap-4 mb-4 grid-cols-1">
+                <div class="uk-margin">
+                    <label for="question" class="uk-form-label">Question</label>
+                    <input type="text" value="{{ item['placeholder'] }}" name="placeholder" id="question" class="uk-input" placeholder="Enter the question shown to participants" required="">
+                </div>
 
-                    <div>
-                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">description</label>
-                        <input type="text" {% if item['description'] %}value="{{ item['description'] }}"{% endif %} name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Question description">
-                    </div>
+                <div class="uk-margin">
+                    <label for="description" class="uk-form-label">description</label>
+                    <input type="text" {% if item['description'] %}value="{{ item['description'] }}"{% endif %} name="description" id="description" class="uk-input" placeholder="Question description">
+                </div>
+    
+                <div class="uk-margin">
+                    <label for="field_name" class="uk-form-label">Short Name - This will be used to identify the question in the Attendees table<br>WARNING: Changing this after creation will reset all values under this column in the attendees table.</label>
+                    <input type="text" value="{{ item['field_name'] }}" name="field_name" id="field_name" class="uk-input" placeholder="Enter a short descriptor word" required="">
+                </div>
+    
+                <div class="uk-margin">
+                    <label for="type" class="uk-form-label">Question Type</label>
+                    {% set itemid = item['$id'] %}
+                    {% set itemtype = item['type'] %}
+                    <select onchange="if (this.value == 'range' || this.value == 'radio') {document.getElementById('options_input__{{ itemid }}').setAttribute('style', 'display: block'); document.getElementById('options__{{ itemid }}').setAttribute('required', 'required')} else {document.getElementById('options_input__{{ itemid }}').setAttribute('style', 'display: none'); document.getElementById('options__{{ itemid }}').removeAttribute('required')}" name="type" id="type__{{ itemid }}" class="uk-select">
+                    <option value="text" {% if item['type'] == 'text' %} selected {% endif %}>Text Input</option>
+                    <option value="color" {% if item['type'] == 'color' %} selected {% endif %}>Color Input</option>
+                    <option value="date" {% if item['type'] == 'date' %} selected {% endif %}>Date Input</option>
+                    <option value="time" {% if item['type'] == 'time' %} selected {% endif %}>Time Input</option>
+                    <option value="datetime-local" {% if item['type'] == 'datetime-local' %} selected {% endif %}>Datetime Input</option>
+                    <option value="email" {% if item['type'] == 'email' %} selected {% endif %}>Email Address</option>
+                    <option value="number" {% if item['type'] == 'number' %} selected {% endif %}>Number Input</option>
+                    <option value="tel" {% if item['type'] == 'tel' %} selected {% endif %}>Phone Number</option>
+                    <option value="url" {% if item['type'] == 'url' %} selected {% endif %}>Link Input</option>
+                    <option value="radio" {% if item['type'] == 'radio' %} selected {% endif %}>Multiple Choice</option>
+                    <option value="range" {% if item['type'] == 'range' %} selected {% endif %}>Range</option>
+                    </select>
+                </div>
+    
+                <div class="uk-margin" id="options_input__{{ item['$id'] }}" style="{% if item['type'] == 'radio' or item['type'] == 'range' %}display:block; {%else%}display: none;{%endif%}">
+                    <label for="options" class="uk-form-label">For Radio/MCQ Inputs: Write the options you want separated by a comma. <br>For range inputs: write min,max where min and max are numbers that the range should fit. For example: 1, 5 would let participants pick a number from 1 to 5.</label>
+                    <input type="text" value="{{ ", ".join(item['options']) }}" name="options" id="options__{{ itemid }}" class="uk-input" placeholder="Options" {% if item['type'] == 'radio' or item['type'] == 'range' %}required{%endif%}>
+                </div>
+    
+                <div class="uk-margin">
+                    <label for="default" class="uk-form-label">Optional - The form will preload with this value.</label>
+                    <input type="text" {% if item['default'] %}value="{{ item['default'] }}"{%endif%} name="default" id="default" class="uk-input" placeholder="Preloaded Value">
+                </div>
+    
+                <div class="uk-margin">
+                    <label class="uk-form-label">Is this Question Required?</label>
         
-                    <div>
-                        <label for="field_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Short Name - This will be used to identify the question in the Attendees table<br>WARNING: Changing this after creation will reset all values under this column in the attendees table.</label>
-                        <input type="text" value="{{ item['field_name'] }}" name="field_name" id="field_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter a short descriptor word" required="">
-                    </div>
+                    <div class="uk-form-controls flex flex-col mt-4 gap-2">
+                    <label for="required_y" class="uk-form-label">
+                        <input type="radio" name="required" id="required_y" class="uk-radio" {% if item['required'] %}checked{%endif%} required="required">
+                        Yes</label>
         
-                    <div>
-                        <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question Type</label>
-                        {% set itemid = item['$id'] %}
-                        {% set itemtype = item['type'] %}
-                        <select onchange="if (this.value == 'range' || this.value == 'radio') {document.getElementById('options_input__{{ itemid }}').setAttribute('style', 'display: block'); document.getElementById('options__{{ itemid }}').setAttribute('required', 'required')} else {document.getElementById('options_input__{{ itemid }}').setAttribute('style', 'display: none'); document.getElementById('options__{{ itemid }}').removeAttribute('required')}" name="type" id="type__{{ itemid }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="text" {% if item['type'] == 'text' %} selected {% endif %}>Text Input</option>
-                        <option value="color" {% if item['type'] == 'color' %} selected {% endif %}>Color Input</option>
-                        <option value="date" {% if item['type'] == 'date' %} selected {% endif %}>Date Input</option>
-                        <option value="time" {% if item['type'] == 'time' %} selected {% endif %}>Time Input</option>
-                        <option value="datetime-local" {% if item['type'] == 'datetime-local' %} selected {% endif %}>Datetime Input</option>
-                        <option value="email" {% if item['type'] == 'email' %} selected {% endif %}>Email Address</option>
-                        <option value="number" {% if item['type'] == 'number' %} selected {% endif %}>Number Input</option>
-                        <option value="tel" {% if item['type'] == 'tel' %} selected {% endif %}>Phone Number</option>
-                        <option value="url" {% if item['type'] == 'url' %} selected {% endif %}>Link Input</option>
-                        <option value="radio" {% if item['type'] == 'radio' %} selected {% endif %}>Multiple Choice</option>
-                        <option value="range" {% if item['type'] == 'range' %} selected {% endif %}>Range</option>
-                        </select>
-                    </div>
-        
-                    <div id="options_input__{{ item['$id'] }}" style="{% if item['type'] == 'radio' or item['type'] == 'range' %}display:block; {%else%}display: none;{%endif%}">
-                        <label for="options" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">For Radio/MCQ Inputs: Write the options you want separated by a comma. <br>For range inputs: write min,max where min and max are numbers that the range should fit. For example: 1, 5 would let participants pick a number from 1 to 5.</label>
-                        <input type="text" value="{{ ", ".join(item['options']) }}" name="options" id="options__{{ itemid }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Options" {% if item['type'] == 'radio' or item['type'] == 'range' %}required{%endif%}>
-                    </div>
-        
-                    <div>
-                        <label for="default" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Optional - The form will preload with this value.</label>
-                        <input type="text" {% if item['default'] %}value="{{ item['default'] }}"{%endif%} name="default" id="default" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Preloaded Value">
-                    </div>
-        
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is this Question Required?</label>
-        
-                    <div style="display: flex; gap: 5px; align-items: center;" class="mb-2">
-                        <input type="radio" name="required" id="required_y" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {% if item['required'] %}checked{%endif%} required="required">
-                        <label for="required_y" class="block mb-0 text-sm font-medium text-gray-900 dark:text-white">Yes</label>
-                    </div>
-        
-                    <div style="display: flex; gap: 5px; align-items: center;" class="mb-2">
-                        <input type="radio" name="required" id="required_n" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {% if not item['required'] %}checked{%endif%} required="required">
-                        <label for="required_n" class="block mb-0 text-sm font-medium text-gray-900 dark:text-white">No</label>
-                    </div>
-                      
-                    <br><br>
-                    <div class="bottom-0 left-0 flex justify-center w-full pb-4 space-x-4 md:px-4">
-                        <button type="submit" class="text-white w-full justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            Save
-                        </button>
-                        <button type="button" data-modal-toggle="edit_q_drawer__{{ item['$id'] }}" aria-controls="edit_q_drawer__{{ item['$id'] }}" class="inline-flex w-full justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                            <svg aria-hidden="true" class="w-5 h-5 -ml-1 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            Cancel
-                        </button>
+                        <label for="required_n" class="uk-form-label">
+                            <input type="radio" name="required" id="required_n" class="uk-radio" {% if not item['required'] %}checked{%endif%} required="required">
+                            No</label>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button type="submit" class="uk-button uk-button-primary">
+                    Update Question
+                </button>
+            </div>
+        </form>
     </div>
-</div>
+</div>    
 {% endfor %}
 
-<div id="create_attribute_drawer" class="fixed top-0 left-0 z-40 w-full h-screen max-w-xs p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-label" aria-hidden="true">
-    <h5 id="drawer-label" class="inline-flex items-center mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">New Question</h5>
-    <button type="button" data-drawer-dismiss="create_attribute_drawer" aria-controls="create_attribute_drawer" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
-        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-        <span class="sr-only">Close menu</span>
-    </button>
-    <form action="/hackathon/{{ data['id'] }}/form/add" method="post">
-        <div class="space-y-4">
-            <div>
-                <label for="question" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question</label>
-                <input type="text" name="placeholder" id="question" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter the question shown to participants" required="">
+<div id="create_drawer" uk-offcanvas="overlay: true">
+    <div class="uk-offcanvas-bar uk-padding">
+        <button class="uk-offcanvas-close" type="button" uk-close></button>
+        
+        <h3 class="text-2xl my-8">Create Question</h3>
+        <form method="post" action="/hackathon/{{ data['id'] }}/form/add">
+            <div class="grid gap-4 mb-4 grid-cols-1">
+                <div class="uk-margin">
+                    <label for="question" class="uk-form-label">Question</label>
+                    <input type="text" name="placeholder" id="question" class="uk-input" placeholder="Enter the question shown to participants" required="">
+                </div>
+    
+                <div class="uk-margin">
+                    <label for="description" class="uk-form-label">Description</label>
+                    <input type="text" name="description" id="description" class="uk-input" placeholder="Question description" required="">
+                </div>
+    
+                <div class="uk-margin">
+                    <label for="field_name" class="uk-form-label">Short Name - This will be used to identify the question in the Attendees table</label>
+                    <input type="text" name="field_name" id="field_name" class="uk-input" placeholder="Enter a short descriptor word" required="">
+                </div>
+    
+                <div class="uk-margin">
+                    <label for="type" class="uk-form-label">Question Type</label>
+                    <select onchange="if (this.value == 'range' || this.value == 'radio') {document.getElementById('options_input_c').setAttribute('style', 'display: block'); document.getElementById('options_c').setAttribute('required', 'required')} else {document.getElementById('options_input_c').setAttribute('style', 'display: none'); document.getElementById('options_c').removeAttribute('required')}" name="type" id="type" class="uk-select">
+                    <option value="text" selected>Text Input</option>
+                    <option value="color">Color Input</option>
+                    <option value="date">Date Input</option>
+                    <option value="time">Time Input</option>
+                    <option value="datetime-local">Datetime Input</option>
+                    <option value="email">Email Address</option>
+                    <option value="number">Number Input</option>
+                    <option value="tel">Phone Number</option>
+                    <option value="url">Link Input</option>
+                    <option value="radio">Multiple Choice</option>
+                    <option value="range">Range</option>
+                    </select>
+                </div>
+    
+                <div class="uk-margin" id="options_input_c" style="display: none;">
+                    <label for="options" class="uk-form-label">For Radio/MCQ Inputs: Write the options you want separated by a comma. <br>For range inputs: write min,max where min and max are numbers that the range should fit. For example: 1, 5 would let participants pick a number from 1 to 5.</label>
+                    <input type="text" name="options" id="options_c" class="uk-input" placeholder="Options" required="">
+                </div>
+    
+                <div class="uk-margin">
+                    <label for="default" class="uk-form-label">Optional - The form will preload with this value.</label>
+                    <input type="text" name="default" id="default" class="uk-input" placeholder="Preloaded Value">
+                </div>
+    
+                <div class="uk-margin">
+                    <label class="uk-form-label">Is this Question Required?</label>
+        
+                        <div class="flex flex-col gap-2 mt-2">
+                            <label for="required_y" class="uk-form-label">
+                            <input type="radio" name="required" id="required_y" class="uk-radio" checked="checked" required="required">
+                            Yes</label>
+            
+                            <label for="required_n" class="uk-form-label">
+                            <input type="radio" name="required" id="required_n" class="uk-radio" required="required">
+                            No</label>
+                        </div>
+                </div>
             </div>
-
-            <div>
-                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                <input type="text" name="description id="description class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Question description" required="">
-            </div>
-
-            <div>
-                <label for="field_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Short Name - This will be used to identify the question in the Attendees table</label>
-                <input type="text" name="field_name" id="field_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Enter a short descriptor word" required="">
-            </div>
-
-            <div>
-                <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question Type</label>
-                <select onchange="if (this.value == 'range' || this.value == 'radio') {document.getElementById('options_input_c').setAttribute('style', 'display: block'); document.getElementById('options_c').setAttribute('required', 'required')} else {document.getElementById('options_input_c').setAttribute('style', 'display: none'); document.getElementById('options_c').removeAttribute('required')}" name="type" id="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="text" selected>Text Input</option>
-                <option value="color">Color Input</option>
-                <option value="date">Date Input</option>
-                <option value="time">Time Input</option>
-                <option value="datetime-local">Datetime Input</option>
-                <option value="email">Email Address</option>
-                <option value="number">Number Input</option>
-                <option value="tel">Phone Number</option>
-                <option value="url">Link Input</option>
-                <option value="radio">Multiple Choice</option>
-                <option value="range">Range</option>
-                </select>
-            </div>
-
-            <div id="options_input_c" style="display: none;">
-                <label for="options" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">For Radio/MCQ Inputs: Write the options you want separated by a comma. <br>For range inputs: write min,max where min and max are numbers that the range should fit. For example: 1, 5 would let participants pick a number from 1 to 5.</label>
-                <input type="text" name="options" id="options_c" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Options" required="">
-            </div>
-
-            <div>
-                <label for="default" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Optional - The form will preload with this value.</label>
-                <input type="text" name="default" id="default" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Preloaded Value">
-            </div>
-
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is this Question Required?</label>
-
-            <div style="display: flex; gap: 5px; align-items: center;" class="mb-2">
-                <input type="radio" name="required" id="required_y" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked="checked" required="required">
-                <label for="required_y" class="block mb-0 text-sm font-medium text-gray-900 dark:text-white">Yes</label>
-            </div>
-
-            <div style="display: flex; gap: 5px; align-items: center;" class="mb-2">
-                <input type="radio" name="required" id="required_n" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" required="required">
-                <label for="required_n" class="block mb-0 text-sm font-medium text-gray-900 dark:text-white">No</label>
-            </div>
-              
-            <br><br>
-            <div class="bottom-0 left-0 flex justify-center w-full pb-4 space-x-4 md:px-4">
-                <button type="submit" class="text-white w-full justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                    Create
-                </button>
-                <button type="button" data-drawer-dismiss="create_attribute_drawer" aria-controls="create_attribute_drawer" class="inline-flex w-full justify-center text-gray-500 items-center bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                    <svg aria-hidden="true" class="w-5 h-5 -ml-1 sm:mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    Cancel
+            <div class="flex items-center space-x-4">
+                <button type="submit" class="uk-button uk-button-primary">
+                    Create Question
                 </button>
             </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 {% endblock %}

@@ -2,38 +2,40 @@
 {% block title %}{{ data['name'] }}{% endblock %}
 {% block content %}
 {% include "public_navigation.html" %}
+<div class="mt-20 mx-24">
+    <h1 class="text-foreground mb-2 text-5xl uk-text-bold">{{ data['name'] }}</h1>
+    {% set endDate = meta['endDate'] if meta['endDate'].split(",")[0] != meta['startDate'].split(",")[0] else meta['endDate'].split(", ")[1] %}
+    <p class="text-muted-foreground text-2xl mb-2"><span class="font-semibold">{{ meta['startDate'] }}</span> to <span class="font-semibold">{{ endDate }}</span></p>
+    <p class="text-muted-foreground text-xl mb-4">{{ meta['location'] }}</p>
+    <a href="/register" class="uk-link text-lg">Register</a>
+    <br><br>
+</div>
 
-<section class="bg-white dark:bg-gray-900">
-    <div class="pb-8 px-4 mx-4 md:mx-24 max-w-screen-xl lg:py-16 lg:px-6 w-screen md:w-[80vw]">
-        <div class="max-w-screen-sm mb-8 lg:mb-16 w-screen md:w-[80vw]">
-            <div class="flex justify-between w-screen md:w-[80vw]" style="align-items: center;">
-                <div class="flex gap-4 w-full">
-                    <img class="rounded-t-lg mb-2 h-32" src="data:image/jpeg;base64, {{ data['logo'] }}" alt="" />
-                    <div>
-                        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{{ data['name'] }}</h2>
-                        <p class="mb-[4px] text-lg font-semibold tracking-tight text-gray-900 dark:text-white">{{ meta['startDate'] }} to {{ meta['endDate'] }}</p>
-                        <p class="mb-4 text-xl tracking-tight text-gray-900 dark:text-white">{{ meta['location'] }}</p>
-                    </div>
-                </div>
-                <a href="/register" class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">Register</a>
-            </div>
-            <br><br>
-            <div class="max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 grid gap-4 grid-cols-1 w-screen md:w-[80vw]">
-                <p class="mb-4 text-lg tracking-tight text-gray-900 dark:text-gray-200">{{ meta['description'] }}</p>
-                <br>
-                <h3 class="mb-4 text-3xl tracking-tight font-bold text-gray-900 dark:text-white">Schedule</h3>
-                {% for item in schedule %}
-                <div style="align-items: center" class="w-full md:w-[50%] mb-6 rounded-lg">
-                        <h3 class="mb-2 text-xl tracking-tight font-bold text-gray-900 dark:text-white">{{ item['name'] }} {% if item['location'] %}@{%endif%} {{ item['location'] }}</h3>
-                        <p class="mb-4 text-lg tracking-tight text-gray-900 dark:text-white">{{ item['startDateTime'] }} <span class="font-semibold">to</span> {{ item['endDateTime'] }}</p>
-                </div>
-                {% endfor %}
-                <h3 class="mb-0 text-3xl tracking-tight font-bold text-gray-900 dark:text-white">Judging Criteria</h3>
-                <p class="mb-4 text-lg tracking-tight text-gray-900 dark:text-gray-200">{% if meta['judgingCriteria'] %}{{ meta['judgingCriteria'] | safe }}{% else %}No judging criteria available.{% endif %}</p>
-            </div>
-        </div> 
+<div class="mx-24 mt-24 mb-24 w-full md:w-3/4">
+    <h1 class="text-foreground text-4xl uk-text-bold mb-6">Schedule</h1>
+    {% for i in range(schedule|count) %}
+    <div class="grid grid-cols-9">
+        {% set item = schedule[i] %}
+        {% if i == 0 or schedule[i-1]['startDateTime'].split(" ")[0] != item['startDateTime'].split(" ")[0] %}
+            <h2 class="text-muted-foreground text-lg col-span-1 text-right">{{ item['startDateTime'].split(" ")[0] }}</h2>
+        {% else %}
+            <h2 class="text-muted-foreground text-lg col-span-1 text-right"></h2>
+        {% endif %}
+
+        <hr class="uk-divider-vertical col-span-1" />
+
+        <div style="align-items: center" class="w-full md:w-[50%] mb-6 col-span-7">
+            <h3 class="font-semibold text-2xl">{{ item['name'] }} {% if item['location'] %}@{%endif%} {{ item['location'] }}</h3>
+            <p class="mb-4 text-lg text-muted-foreground">{{ " ".join(item['startDateTime'].split(" ")[1:]) }} <span class="font-light">to</span> {{ " ".join(item['endDateTime'].split(" ")[1:]) }}</p>
+        </div>
     </div>
-  </section>
+    {% endfor %}
+</div>
+
+<div class="mx-24 mt-20 mb-24 w-full md:w-3/4">
+    <h1 class="text-foreground text-4xl uk-text-bold mb-6">Judging Criteria</h1>
+    <p class="text-lg text-muted-foreground">{% if meta['judgingCriteria'] %}{{ meta['judgingCriteria'] | safe }}{% else %}No judging criteria available.{% endif %}</p>
+</div>
 
 
 {% endblock %}

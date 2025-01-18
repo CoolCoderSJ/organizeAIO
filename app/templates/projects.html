@@ -3,109 +3,114 @@
 {% block content %}
 {% include "navigation.html" %}
 
-<div class="mt-12 mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 flex justify-between mr-24">
-    <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Projects</h2>
+<div class="mt-20 mx-12">
+    <div class="flex justify-between">
+        <h1 class="text-foreground mb-2 text-4xl uk-text-bold">Projects</h1>
+        <div class="flex gap-2 items-center">
+            {% if data['showProjects'] %}
+            <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/hide">
+                <button class="uk-button uk-button-default">
+                    Hide Public Project Gallery
+                </button>
+            </form>
+            {% else %}
+            <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/show">
+                <button class="uk-button uk-button-default">
+                    Show Public Project Gallery
+                </button>
+            </form>
+            {% endif %}
 
-    <div class="flex gap-4 h-full">
-    {% if data['showProjects'] %}
-    <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/hide">
-        <button class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-            Hide Public Project Gallery
-        </button>
-    </form>
-    {% else %}
-    <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/show">
-        <button class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-            Show Public Project Gallery
-        </button>
-    </form>
-    {% endif %}
 
-
-    {% if data['allowProjectCreation'] %}
-    <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/dontallowcreation">
-        <button class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-            Close Project Submission
-        </button>
-    </form>
-    {% else %}
-    <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/allowcreation">
-        <button class="h-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
-            Allow Project Submission
-        </button>
-    </form>
-    {% endif %}
-    </div>
-</div>
-
-<div class="mx-4 md:mx-24 max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 grid gap-4 md:grid-cols-3 grid-cols-1">
-    {% for item in projects %}
-    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"> 
-        <a class="flex justify-center"> <img class="rounded-t-lg h-32" src="data:image/jpeg;base64, {{ images[item['$id']] }}" alt="" /> </a>
-        <div class="p-5">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ item['name'] }}</h5>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ ", ".join(item['owner']) }}<br></p> 
-            <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" data-modal-target="links_modal__{{ item['$id'] }}" data-modal-toggle="links_modal__{{ item['$id'] }}">Open Links</button>
-            <button type="button" class="inline-flex items-center px-3 py-2.5 h-full text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" data-modal-target="edit_modal__{{ item['$id'] }}" data-modal-toggle="edit_modal__{{ item['$id'] }}"><i class="fa-regular fa-pen-to-square"></i></button>
-            <button type="button" class="inline-flex items-center px-3 py-2.5 h-full text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900" data-modal-target="delete_modal__{{ item['$id'] }}" data-modal-toggle="delete_modal__{{ item['$id'] }}"><i class="fa-solid fa-trash"></i></button>
+            {% if data['allowProjectCreation'] %}
+            <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/dontallowcreation">
+                <button class="uk-button uk-button-primary">
+                    Close Project Submission
+                </button>
+            </form>
+            {% else %}
+            <form method="post" class="h-full" action="/hackathon/{{ data['id'] }}/projects/allowcreation">
+                <button class="uk-button uk-button-primary">
+                    Allow Project Submission
+                </button>
+            </form>
+            {% endif %}
         </div>
     </div>
-    {% endfor %}
+    <br><br>
+
+
+    <div class="mt-24 flex flex-wrap gap-4">
+        {% for item in projects %}
+        <div class="uk-width-1-2@m uk-card uk-card-body uk-card-default w-[500px]">
+            <a class="flex justify-center"> <img class="rounded-lg h-32" src="data:image/jpeg;base64, {{ images[item['$id']] }}" alt="" /> </a>
+            <h3 class="uk-card-title text-xl mb-0 mt-2">{{ item['name'] }}</h3>
+            <p class="uk-margin mt-0">
+            {{ ", ".join(item['owner']) }}
+            </p>
+            <div class="flex gap-2">
+                <button type="button" uk-toggle="target: #links__{{ item['$id'] }}" class="uk-button uk-button-primary">Open Links</button>
+                <button type="button" uk-toggle="target: #edit__{{ item['$id'] }}" class="uk-button uk-button-default"><i class="fa-regular fa-pen-to-square"></i></button>
+                <button type="button" uk-toggle="target: #delete__{{ item['$id'] }}" class="uk-button uk-button-danger"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
 </div>
+
 
 {% for item in projects %}
-<div id="links_modal__{{ item['$id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-            <!-- Modal header -->
-            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Project Links
-                </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="links_modal__{{ item['$id'] }}">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div style="display: flex; gap: 6px; flex-direction: column;">
-            {% for link in item['links'] %}
-                <a href="{{ link }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline w-full overflow-hidden" style="text-overflow: ellipsis; text-wrap: nowrap;" target="_blank">{{ link }}</a>
-            {% endfor %}
-            </div>
-        </div>
+<div id="links__{{ item['$id'] }}" uk-modal>
+    <div class="uk-modal-body uk-modal-dialog">
+      <h2 class="uk-modal-title">Project Links</h2>
+      <div class="my-4">
+        {% for link in item['links'] %}
+            <a href="{{ link }}" class="uk-link" style="text-overflow: ellipsis; text-wrap: nowrap;" target="_blank">{{ link }}</a>
+        {% endfor %}
+      </div>
+      <p class="uk-text-right">
+        <button class="uk-modal-close uk-button uk-button-default" type="button">
+        Close
+        </button>
+      </p>
     </div>
 </div>
 
-<div id="edit_modal__{{ item['$id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-            <!-- Modal header -->
-            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Update Project
-                </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="edit_modal__{{ item['$id'] }}">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <form method="post" action="/hackathon/{{ data['id'] }}/projects/edit/{{ item['$id'] }}" enctype="multipart/form-data">
-                <div>
-                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                    <input type="text" name="name" id="name" value="{{ item['name'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Project name" required="">
-                </div>
-                <br>
-                <div>
-                    <label for="owner" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project Members (separated by a comma)</label>
-                    <input type="text" name="owner" id="owner" value="{{ ", ".join(item['owner']) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Project Members" required="">
-                </div>
-                <br>
+<div id="delete__{{ item['$id'] }}" uk-modal>
+    <div class="uk-modal-body uk-modal-dialog">
+      <h2 class="uk-modal-title">Delete Project</h2>
+      <p class="my-4">
+        Are you sure you want to remove this project? This action is irreversible.
+      </p>
+      <p class="uk-text-right">
+        <form method="post" action="/hackathon/{{ data['id'] }}/projects/delete/{{ item['$id'] }}">
+            <button class="uk-modal-close uk-button uk-button-default" type="button">
+            Cancel
+            </button>
+            <button class="uk-button uk-button-danger" type="submit">Delete</button>
+        </form>
+      </p>
+    </div>
+</div>
 
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Links</label>
+<div id="edit__{{ item['$id'] }}" uk-modal>
+    <div class="uk-modal-body uk-modal-dialog">
+      <h2 class="uk-modal-title">Update Project</h2>
+      <form method="post" action="/hackathon/{{ data['id'] }}/projects/edit/{{ item['$id'] }}" enctype="multipart/form-data">
+        <div class="my-4">
+            <div>
+                <label for="name" class="uk-form-label">Name</label>
+                <input type="text" name="name" id="name" value="{{ item['name'] }}" class="uk-input" placeholder="Project name" required="">
+            </div>
+            <br>
+            <div>
+                <label for="owner" class="uk-form-label">Project Members (separated by a comma)</label>
+                <input type="text" name="owner" id="owner" value="{{ ", ".join(item['owner']) }}" class="uk-input" placeholder="Project Members" required="">
+            </div>
+            <br>
+
+            <div>
+                <label class="uk-form-label">Links</label>
                 <input type="hidden" name="links" id="links_input__{{ item['$id'] }}" value="{{ ','.join(item['links']) }}">
                 <script>
                     const remove = (id) => {
@@ -130,66 +135,40 @@
 
                     const add = () => {
                         document.getElementById("links_container__{{ item['$id'] }}").innerHTML += `
-                        <div class="flex gap-4" style="align-items: center;">
-                            <input type="url" id="{{ item['$id'] }}__link_${document.getElementsByClassName("{{ item['$id'] }}__link").length}" class="{{ item['$id'] }}__link bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 mb-2" onkeyup=update(this.id) placeholder="Link" required="">
-                            <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove('{{ item['$id'] }}__link_${document.getElementsByClassName("{{ item['$id'] }}__link").length}')></i>
+                        <div class="flex gap-4 mb-2" style="align-items: center;">
+                            <input type="url" id="{{ item['$id'] }}__link_${document.getElementsByClassName("{{ item['$id'] }}__link").length}" class="{{ item['$id'] }}__link uk-input" onkeyup=update(this.id) placeholder="Link" required="">
+                            <i class="fa-solid fa-circle-xmark text-white cursor-pointer" onclick=remove('{{ item['$id'] }}__link_${document.getElementsByClassName("{{ item['$id'] }}__link").length}')></i>
                         </div>
                         `
                     }
                 </script>
 
-                <div id="links_container__{{ item['$id'] }}">
+                <div id="links_container__{{ item['$id'] }}" class="mb-2">
                 {% for link in item['links'] %}
-                <div class="flex gap-4" style="align-items: center;">
-                    <input type="url" value="{{ link }}" id="{{ item['$id'] }}__link_{{ item['links'].index(link) }}" class="{{ item['$id'] }}__link bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 mb-2" onkeyup=update(this.id) placeholder="Link" required="">
-                    <i class="fa-solid fa-circle-xmark mb-2 text-white cursor-pointer" onclick=remove("{{ item['$id'] }}__link_{{ item['links'].index(link) }}")></i>
+                <div class="flex gap-4 mb-2" style="align-items: center;">
+                    <input type="url" value="{{ link }}" id="{{ item['$id'] }}__link_{{ item['links'].index(link) }}" class="{{ item['$id'] }}__link uk-input" onkeyup=update(this.id) placeholder="Link" required="">
+                    <i class="fa-solid fa-circle-xmark text-white cursor-pointer" onclick=remove("{{ item['$id'] }}__link_{{ item['links'].index(link) }}")></i>
                 </div>
                 {% endfor %}
                 </div>
 
-                <a onclick="add()" class="font-medium text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 cursor-pointer" target="_blank">Add Link</a>
+                <a onclick="add()" class="uk-link uk-text-small cursor-pointer">Add Link</a>
                 <br><br>
+            </div>
 
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file">Upload Cover Image</label>
-                    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file" name="file" type="file">
-                </div>
-
-                <div class="flex items-center space-x-4 mt-8">
-                    <button type="submit" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                        Update Project
-                    </button>
-                    <button type="button" data-modal-toggle="edit_modal__{{ item['$id'] }}" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div id="delete_modal__{{ item['$id'] }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-            <button type="button" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="delete_modal__{{ item['$id'] }}">
-                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                <span class="sr-only">Close modal</span>
-            </button>
-            <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-            <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to remove this project?</p>
-            <div class="flex justify-center items-center space-x-4">
-                <button data-modal-toggle="delete_modal__{{ item['$id'] }}" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                    No, cancel
-                </button>
-                <form method="post" action="/hackathon/{{ data['id'] }}/projects/delete/{{ item['$id'] }}">
-                <button type="submit" class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                    Yes, I'm sure
-                </button>
-                </form>
-                </div>
+            <div>
+                <label class="uk-form-label" for="file">Upload Cover Image</label>
+                <input class="uk-input" id="file" name="file" type="file">
             </div>
         </div>
-    </div>
+        <p class="uk-text-right mt-4">
+            <button class="uk-modal-close uk-button uk-button-default" type="button">
+            Cancel
+            </button>
+            <button class="uk-button uk-button-primary" type="submit">Update</button>
+        </p>
+        </div>
+    </form>
+</div>
 {% endfor %}
 {% endblock %}

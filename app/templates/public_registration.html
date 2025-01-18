@@ -3,90 +3,81 @@
 {% block content %}
 {% include "public_navigation.html" %}
 
-<section class="bg-white dark:bg-gray-900">
-    <div class="pb-8 px-4 mx-4 md:mx-24 max-w-screen-xl lg:py-16 lg:px-6 w-screen md:w-[80vw]">
-        <div class="max-w-screen-sm mb-8 lg:mb-16 w-screen md:w-[80vw]">
+<div class="my-20 mx-24">
+    <h1 class="text-foreground mb-2 text-5xl uk-text-bold">Register</h1>
+    <br><br>
+    <form action="/register" method="post" class="w-full md:w-1/2">
+        <div class="gap-4">
+            {% for attr in attrs['attributes'] %}
+            {% if attr['key'] != "checkedIn" %}
+            <div class="uk-margin flex flex-col mb-8">
+                <label class="text-lg">{{ form[attr['key']]['placeholder'] }}</label>
+                {% if form[attr['key']]["description"] %}
+                <label class="text-muted-foreground">{{ form[attr['key']]['description'] }}</label>
+                {% endif %}
 
-            <div class="flex justify-between w-screen md:w-[80vw]" style="align-items: center;">
-                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Register</h2>
+                {% if form[attr['key']]["type"] != "checkbox" and form[attr['key']]["type"] != "radio" %}
+
+                <div style="display: flex; gap: 5px; align-items: center;" class="mt-2">
+                <input type="{{ form[attr['key']]["type"] }}" name="{{ attr['key'] }}" id="{{ attr['key'] }}" class="{% if form[attr['key']]['type'] == 'range' %}uk-radio w-full{% else %}uk-input{% endif %}" {% if form[attr['key']]['type'] == 'range' %}style="border-radius: 6px;"{% endif %}
+
+                {% if form[attr['key']]["placeholder"] %}
+                placeholder="{{ form[attr['key']]["placeholder"] }}"
+                {% endif %}
+
+                {% if form[attr['key']]["default"] %}
+                value="{{ form[attr['key']]["default"] }}"
+                {% endif %}
+
+                {% if form[attr['key']]["required"] %}
+                required="required"
+                {% endif %}
+
+                {% if form[attr['key']]["type"] == "range" %}
+                min="{{ form[attr['key']]["options"][0] }}" max="{{ form[attr['key']]["options"][1] }}"
+                {% endif %}
+                
+                {% if form[attr['key']]["type"] == "range" %}
+                {% set attrkey = attr['key'] %}
+                onchange="document.getElementById('{{ attrkey }}__value_add').innerHTML = this.value"
+                {% endif %}
+                >
+                {% if form[attr['key']]["type"] == "range" %}
+                <p class="text-foreground" id="{{ attr['key'] }}__value_add">{{ form[attr['key']]["default"] }}</p>
+                {% endif %}
+                </div>
+
+                {% else %}
+                <div class="mt-3"></div>
+                {% for option in form[attr['key']]['options'] %}
+                <label for="{{ attr['key'] }}__{{ option }}" class="uk-form-label mb-2 mt-1">
+                    <input type="{{ form[attr['key']]["type"] }}" name="{{ attr['key'] }}" id="{{ attr['key'] }}__{{ option }}" class="uk-radio"
+
+                {% if form[attr['key']]["default"] == option %}
+                checked="checked"
+                {% endif %}
+
+                {% if form[attr['key']]["required"] %}
+                required="required"
+                {% endif %}
+
+                value="{{ option }}"
+                >
+
+                {{ option | title }}</label>
+                {% endfor %}
+                {% endif %}
             </div>
-            <br><br>
-            <div class="max-w-screen mb-8 lg:mb-16 bg-gray-50 dark:bg-gray-900 grid gap-4 grid-cols-1 w-screen md:w-[80vw]">
-                <form action="/register" class="grid grid-cols-2" method="post">
-                    <div class="space-y-4">
-                        {% for attr in attrs['attributes'] %}
-                        {% if attr['key'] != "checkedIn" %}
-                        <div>
-                            <label class="block mb-0 text-md font-medium text-gray-900 dark:text-white">{{ form[attr['key']]['placeholder'] }}</label>
-                            {% if form[attr['key']]["description"] %}
-                            <label class="block mb-4 text-sm text-gray-900 dark:text-white">{{ form[attr['key']]['description'] }}</label>
-                            {% endif %}
-
-                            {% if form[attr['key']]["type"] != "checkbox" and form[attr['key']]["type"] != "radio" %}
-            
-                            <div style="display: flex; gap: 5px; align-items: center;">
-                            <input type="{{ form[attr['key']]["type"] }}" name="{{ attr['key'] }}" id="{{ attr['key'] }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            
-                            {% if form[attr['key']]["placeholder"] %}
-                            placeholder="{{ form[attr['key']]["placeholder"] }}"
-                            {% endif %}
-            
-                            {% if form[attr['key']]["default"] %}
-                            value="{{ form[attr['key']]["default"] }}"
-                            {% endif %}
-            
-                            {% if form[attr['key']]["required"] %}
-                            required="required"
-                            {% endif %}
-            
-                            {% if form[attr['key']]["type"] == "range" %}
-                            min="{{ form[attr['key']]["options"][0] }}" max="{{ form[attr['key']]["options"][1] }}"
-                            {% endif %}
-                            
-                            {% if form[attr['key']]["type"] == "range" %}
-                            {% set attrkey = attr['key'] %}
-                            onchange="document.getElementById('{{ attrkey }}__value_add').innerHTML = this.value"
-                            {% endif %}
-                            >
-                            {% if form[attr['key']]["type"] == "range" %}
-                            <p class="dark:text-white" id="{{ attr['key'] }}__value_add">{{ form[attr['key']]["default"] }}</p>
-                            {% endif %}
-                            </div>
-            
-                            {% else %}
-                            {% for option in form[attr['key']]['options'] %}
-                            <div style="display: flex; gap: 5px; align-items: center;" class="mb-2">
-                                <input type="{{ form[attr['key']]["type"] }}" name="{{ attr['key'] }}" id="{{ attr['key'] }}__{{ option }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            
-                            {% if form[attr['key']]["default"] == option %}
-                            checked="checked"
-                            {% endif %}
-            
-                            {% if form[attr['key']]["required"] %}
-                            required="required"
-                            {% endif %}
-            
-                            value="{{ option }}"
-                            >
-            
-                            <label for="{{ attr['key'] }}__{{ option }}" class="block mb-0 text-sm font-medium text-gray-900 dark:text-white">{{ option | title }}</label>
-                            </div>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                        <br>
-                        <div class="bottom-0 left-0 flex w-full pb-4 space-x-4">
-                            <button type="submit" class="text-white w-full justify-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                Submit
-                            </button>
-                        </div>
-                </form>
+            {% endif %}
+            {% endfor %}
+            <br>
+            <div class="bottom-0 left-0 flex w-full pb-4 space-x-4">
+                <button type="submit" class="uk-button uk-button-primary">
+                    Register
+                </button>
             </div>
-        </div> 
-    </div>
-  </section>
-
+        </div>
+    </form>
+</div>
 
 {% endblock %}
