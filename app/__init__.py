@@ -31,8 +31,8 @@ Session(app)
 
 @app.before_request
 def before_request():
-    host = "organizeaio.xyz" if request.host == "localhost:9738" else request.host
-    if 'user' not in session and request.path not in ['', '/', '/login', '/register', '/logout'] and not request.path.startswith("/static") and not request.path.startswith("project") and host == "organizeaio.xyz":
+    host = "organizeaio.org" if request.host == "localhost:9738" else request.host
+    if 'user' not in session and request.path not in ['', '/', '/login', '/register', '/logout'] and not request.path.startswith("/static") and not request.path.startswith("project") and host == "organizeaio.org":
         return redirect("/")
 
 def get_all_docs(data, collection, queries=[]):

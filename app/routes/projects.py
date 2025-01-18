@@ -103,16 +103,16 @@ def delete_project(id, project_id):
 def create_project_get():
     host = request.host
     print(host)
-    if not host.endswith("organizeaio.xyz") and not host.endswith("localhost:9738"):
-        return redirect("https://organizeaio.xyz")
-    if host.endswith("organizeaio.xyz"):
-        slug = request.host.replace(".organizeaio.xyz", "")
+    if not host.endswith("organizeaio.org") and not host.endswith("localhost:9738"):
+        return redirect("https://organizeaio.org")
+    if host.endswith("organizeaio.org"):
+        slug = request.host.replace(".organizeaio.org", "")
     else:
         slug = request.host.replace(".localhost:9738", "")
     print(slug)
     hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
     if len(hackathons) != 1:
-        return redirect("https://organizeaio.xyz")
+        return redirect("https://organizeaio.org")
     hackathon = hackathons[0]
     hackathon_id = hackathon['hackathon_id']
     meta = db.get_document(hackathon_id, "metadata", "data")
@@ -136,16 +136,16 @@ def create_project_get():
 @app.post('/projects/new')
 def create_project():
     host = request.host
-    if not host.endswith("organizeaio.xyz") and not host.endswith("localhost:9738"):
-        return redirect("https://organizeaio.xyz")
-    if host.endswith("organizeaio.xyz"):
-        slug = request.host.replace(".organizeaio.xyz", "")
+    if not host.endswith("organizeaio.org") and not host.endswith("localhost:9738"):
+        return redirect("https://organizeaio.org")
+    if host.endswith("organizeaio.org"):
+        slug = request.host.replace(".organizeaio.org", "")
     else:
         slug = request.host.replace(".localhost:9738", "")
     print(slug)
     hackathons = get_all_docs("data", "data", [Query.equal("slug", slug)])
     if len(hackathons) != 1:
-        return redirect("https://organizeaio.xyz")
+        return redirect("https://organizeaio.org")
     hackathon = hackathons[0]
     hackathon_id = hackathon['hackathon_id']
 
